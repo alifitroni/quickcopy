@@ -535,11 +535,11 @@
 
     <!-- Items Container -->
     <div id="itemsContainer"><div class="item-section">
+          <div class="tag-badge">Note :</div>
           
-          <div class="item-desc"><strong>Tujuan:</strong> Mengubah representasi data agar siap digunakan dalam analisis atau pemodelan.</div>
           <div class="copy-card">
             <div class="card-top">
-              <span class="card-label">Menulis</span>
+              <span class="card-label">Copy</span>
               <div class="card-actions">
                 <button class="icon-btn" title="Salin Teks" onclick="copyText(0, this)">
                   <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -557,7 +557,11 @@
                 </button>
               </div>
             </div>
-            <div class="card-body">Sekarang kerjakan Langkah 8: Transformasi Data. Buat kode untuk melakukan transformasi sesuai kebutuhan dataset, seperti normalisasi, standardisasi, encoding, atau transformasi lainnya jika memang diperlukan. Jelaskan alasan pemilihan metode dan kolom yang diproses. Hindari transformasi yang tidak relevan. Jangan melakukan pelabelan data atau pemodelan machine learning.</div>
+            <div class="card-body">##Sistem Prediksi Risiko Penyakit Ginjal
+Model ini bertujuan mengidentifikasi indikasi risiko penyakit ginjal berdasarkan sejumlah parameter kesehatan, sehingga dapat memberikan informasi awal sebagai bahan pertimbangan untuk pemeriksaan medis lebih lanjut.
+
+**Sumber Dataset**: https://www.kaggle.com/datasets/miadul/kidney-disease-risk-dataset/data
+**Variabel Target**: `CKD_Status`</div>
           </div>
           <div class="item-edit-toolbar">
             <button class="btn btn-secondary" onclick="moveItem(0, -1)" disabled="">↑ Naik</button>
@@ -566,11 +570,11 @@
             <button class="btn btn-danger" onclick="deleteItem(0)">Hapus</button>
           </div>
         </div><div class="item-section">
-          <div class="tag-badge">Langkah 9 – Pelabelan</div>
-          <div class="item-desc"><strong>Tujuan:</strong> Memberikan label atau kategori pada data sesuai kebutuhan analisis.</div>
+          <div class="tag-badge">Note :</div>
+          
           <div class="copy-card">
             <div class="card-top">
-              <span class="card-label">Menulis</span>
+              <span class="card-label">Copy</span>
               <div class="card-actions">
                 <button class="icon-btn" title="Salin Teks" onclick="copyText(1, this)">
                   <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -588,13 +592,408 @@
                 </button>
               </div>
             </div>
-            <div class="card-body">Sekarang kerjakan Langkah 9: Pelabelan Data. Buat kode untuk memberikan label atau kategori pada data berdasarkan tujuan analisis dan aturan yang telah ditentukan. Jelaskan kriteria pelabelan, aturan pemberian label, serta tampilkan distribusi hasil label. Jangan membuat label berdasarkan asumsi tanpa dasar. Jangan melakukan pemodelan machine learning.</div>
+            <div class="card-body">### Tahap Persiapan Data
+1. **Menelaah Data**
+Langkah 1: Eksplorasi data (*Mengenal, memeriksa, dan menafsirkan awal data*)
+2. **Memvalidasi Data**
+Langkah 2: Kualitas data (*Memastikan data benar, lengkap, konsisten, dan cukup*)
+3. **Menentukan Objek Data**
+Langkah 3: Sampling (*Split data latih &amp; uji*); Langkah 4: Seleksi fitur (*Memilih baris dan atribut/kolom yang dipakai hanya berdasarkan analisis data latih*)
+4. **Membersihkan Data**
+Langkah 5: Nilai hilang &amp; data kotor; Langkah 6: Outlier (*Memperbaiki data kosong, ganda, salah format, dan ekstrem menggunakan parameter dari data latih*)
+5. **Konstruksi dan Pelabelan Data**
+Langkah 7: Tipe data; Langkah 8: Transformasi; Langkah 9: Pelabelan (*Mengubah bentuk data, membuat fitur turunan, dan memisahkan fitur `X` serta label `y`*)</div>
           </div>
           <div class="item-edit-toolbar">
             <button class="btn btn-secondary" onclick="moveItem(1, -1)">↑ Naik</button>
-            <button class="btn btn-secondary" onclick="moveItem(1, 1)" disabled="">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="moveItem(1, 1)">↓ Turun</button>
             <button class="btn btn-secondary" onclick="openEditModal(1)">Edit</button>
             <button class="btn btn-danger" onclick="deleteItem(1)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          <div class="item-desc">Prompt Awal</div>
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Copy</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(2, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(2)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">Saya sedang melakukan Data Preparation untuk proyek AI dan Data Science menggunakan Python di Google Colab. Anda bertindak sebagai asisten pemrograman yang membantu saya membuat kode secara bertahap.
+
+KONTEKS PROYEK:
+Judul: Sistem Prediksi Risiko Penyakit Ginjal.
+Tujuan: Mengidentifikasi indikasi risiko penyakit ginjal berdasarkan parameter kesehatan sebagai informasi awal untuk pemeriksaan medis lebih lanjut.
+Sumber Dataset: https://www.kaggle.com/datasets/miadul/kidney-disease-risk-dataset/data
+Variabel Target: CKD_Status.
+
+TAHAPAN DATA PREPARATION:
+
+Tahap 0: Persiapan Lingkungan.
+
+Tahap 1: Menelaah Data.
+Langkah 1: Eksplorasi Data.
+
+Tahap 2: Memvalidasi Data.
+Langkah 2: Kualitas Data.
+
+Tahap 3: Menentukan Objek Data.
+Langkah 3: Sampling (Split Data Latih dan Data Uji).
+Langkah 4: Seleksi Fitur.
+
+Tahap 4: Membersihkan Data.
+Langkah 5: Nilai Hilang dan Data Kotor.
+Langkah 6: Outlier.
+
+Tahap 5: Konstruksi dan Pelabelan Data.
+Langkah 7: Tipe Data.
+Langkah 8: Transformasi.
+Langkah 9: Pelabelan.
+
+ATURAN PENGERJAAN:
+1. Buat kode hanya sesuai tahap dan langkah yang sedang saya instruksikan.
+2. Jangan mengerjakan langkah berikutnya sebelum saya meminta.
+3. Gunakan struktur dan nama kolom sesuai dataset asli.
+4. Buat kode sederhana, sistematis, dan mudah dipahami.
+5. Jangan mengubah dataset asli secara langsung.
+6. Jangan melakukan proses di luar tujuan langkah yang sedang dikerjakan.
+7. Berikan penjelasan singkat untuk setiap kode.
+8. Tunggu hasil eksekusi Google Colab dari saya sebelum melanjutkan ke langkah berikutnya.
+9. Hindari data leakage, khususnya pada variabel target CKD_Status.
+10. Parameter pengolahan yang dipelajari dari data harus menggunakan data latih saja, kemudian diterapkan secara konsisten pada data uji.
+11. Jika suatu proses tidak diperlukan, jelaskan alasannya dan jangan dipaksakan.
+
+Untuk saat ini, pahami instruksi dan konteks proyek terlebih dahulu. Jangan membuat kode apa pun sampai saya meminta untuk memulai Tahap 0: Persiapan Lingkungan.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(2, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(2, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(2)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(2)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          <div class="item-desc">Tahap 0 – Persiapan Lingkungan</div>
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Copy</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(3, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(3)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">Mulai Tahap 0: Persiapan Lingkungan. Buat kode Python untuk menyiapkan Google Colab, mengimpor library yang diperlukan, membaca dataset dari Kaggle atau file yang saya unggah, dan memastikan dataset berhasil dimuat. Tampilkan informasi singkat mengenai dataset. Jangan melakukan eksplorasi, pemeriksaan kualitas, atau perubahan data.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(3, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(3, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(3)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(3)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          <div class="item-desc">Tahap 1 – Menelaah Data</div>
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Langkah 1: Eksplorasi Data</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(4, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(4)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">Kerjakan Langkah 1: Eksplorasi Data. Buat kode untuk menampilkan dimensi dataset, nama kolom, tipe data awal, sampel data, statistik deskriptif, dan distribusi nilai setiap kolom yang relevan. Fokus hanya memahami karakteristik dataset. Jangan melakukan validasi, pembersihan, atau perubahan data.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(4, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(4, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(4)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(4)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          <div class="item-desc">Tahap 2 – Memvalidasi Data</div>
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Langkah 2: Kualitas Data</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(5, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(5)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">Kerjakan Langkah 2: Kualitas Data. Buat kode untuk memeriksa kelengkapan, konsistensi, duplikasi, format, dan kesesuaian nilai setiap kolom. Tampilkan hasil pemeriksaan dalam bentuk tabel atau ringkasan. Jangan memperbaiki, menghapus, atau mengubah data.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(5, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(5, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(5)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(5)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          <div class="item-desc">Tahap 3 – Menentukan Objek Data</div>
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Langkah 3: Sampling</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(6, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(6)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">Kerjakan Langkah 3: Sampling. Buat kode untuk membagi dataset menjadi data latih dan data uji (train-test split). Gunakan pembagian yang sesuai, misalnya 80:20, serta pertimbangkan stratifikasi berdasarkan CKD_Status jika diperlukan. Pastikan pembagian dilakukan sebelum proses seleksi fitur dan pembersihan yang memerlukan pembelajaran parameter dari data. Tampilkan jumlah dan distribusi kelas pada masing-masing data. Jangan melakukan proses lainnya.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(6, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(6, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(6)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(6)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Langkah 4: Seleksi Fitur</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(7, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(7)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">Kerjakan Langkah 4: Seleksi Fitur. Buat kode untuk memilih fitur yang relevan dalam memprediksi CKD_Status berdasarkan analisis data latih saja. Jangan menggunakan data uji untuk menentukan fitur. Pertahankan variabel target sebagai label. Tampilkan daftar fitur terpilih dan alasan pemilihannya. Jangan melakukan transformasi atau pemodelan.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(7, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(7, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(7)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(7)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          <div class="item-desc">Tahap 4 – Membersihkan Data</div>
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Langkah 5: Nilai Hilang dan Data Kotor</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(8, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(8)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">Kerjakan Langkah 5: Nilai Hilang dan Data Kotor. Buat kode untuk menangani missing values, duplikasi, kesalahan penulisan, dan format tidak konsisten. Tentukan metode penanganan berdasarkan data latih, kemudian terapkan parameter yang sama pada data uji. Jangan menggunakan informasi data uji untuk menentukan nilai pengganti. Jangan menangani outlier atau melakukan transformasi.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(8, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(8, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(8)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(8)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Langkah 6: Outlier</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(9, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(9)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">Kerjakan Langkah 6: Outlier. Buat kode untuk mengidentifikasi outlier pada fitur numerik menggunakan metode yang sesuai seperti IQR. Tentukan batas outlier berdasarkan data latih dan terapkan aturan yang konsisten pada data uji. Tampilkan hasil identifikasi dan rekomendasi penanganan. Jangan otomatis menghapus atau mengubah nilai ekstrem tanpa alasan yang jelas.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(9, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(9, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(9)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(9)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          <div class="item-desc">Tahap 5 – Konstruksi dan Pelabelan Data</div>
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Langkah 7: Tipe Data</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(10, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(10)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">Kerjakan Langkah 7: Tipe Data. Periksa dan sesuaikan tipe data setiap kolom berdasarkan karakteristiknya, seperti integer, float, string, datetime, atau kategori. Tampilkan tipe data sebelum dan sesudah penyesuaian. Jangan melakukan transformasi nilai atau pelabelan.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(10, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(10, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(10)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(10)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Langkah 8: Transformasi</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(11, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(11)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">Kerjakan Langkah 8: Transformasi Data. Buat kode untuk melakukan transformasi yang diperlukan, seperti encoding, normalisasi, atau standardisasi. Pelajari parameter transformasi dari data latih saja, kemudian terapkan pada data uji menggunakan parameter yang sama. Pastikan tidak terjadi data leakage dan jangan melakukan transformasi yang tidak diperlukan. Jangan melakukan pemodelan machine learning.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(11, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(11, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(11)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(11)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Langkah 9: Pelabelan</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(12, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(12)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">Kerjakan Langkah 9: Pelabelan Data. Periksa variabel target CKD_Status dan pastikan labelnya sesuai dengan kebutuhan prediksi. Jika diperlukan pelabelan ulang, gunakan aturan yang memiliki dasar dari dataset dan konsisten pada kedua data. Pisahkan fitur sebagai X dan variabel target sebagai y untuk data latih dan data uji. Tampilkan distribusi kelas serta bentuk akhir X_train, X_test, y_train, dan y_test. Jangan mengubah makna label atau membuat label berdasarkan asumsi.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(12, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(12, 1)" disabled="">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(12)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(12)">Hapus</button>
           </div>
         </div></div>
 
@@ -681,16 +1080,82 @@
     // Data bawaan awal (sesuai screenshot user)
     const DEFAULT_ITEMS = [
   {
-    "badge": "",
-    "desc": "<strong>Tujuan:</strong> Mengubah representasi data agar siap digunakan dalam analisis atau pemodelan.",
-    "cardLabel": "Menulis",
-    "text": "Sekarang kerjakan Langkah 8: Transformasi Data. Buat kode untuk melakukan transformasi sesuai kebutuhan dataset, seperti normalisasi, standardisasi, encoding, atau transformasi lainnya jika memang diperlukan. Jelaskan alasan pemilihan metode dan kolom yang diproses. Hindari transformasi yang tidak relevan. Jangan melakukan pelabelan data atau pemodelan machine learning."
+    "badge": "Note :",
+    "desc": "",
+    "cardLabel": "Copy",
+    "text": "##Sistem Prediksi Risiko Penyakit Ginjal\nModel ini bertujuan mengidentifikasi indikasi risiko penyakit ginjal berdasarkan sejumlah parameter kesehatan, sehingga dapat memberikan informasi awal sebagai bahan pertimbangan untuk pemeriksaan medis lebih lanjut.\n\n**Sumber Dataset**: https://www.kaggle.com/datasets/miadul/kidney-disease-risk-dataset/data\n**Variabel Target**: `CKD_Status`"
   },
   {
-    "badge": "Langkah 9 – Pelabelan",
-    "desc": "<strong>Tujuan:</strong> Memberikan label atau kategori pada data sesuai kebutuhan analisis.",
-    "cardLabel": "Menulis",
-    "text": "Sekarang kerjakan Langkah 9: Pelabelan Data. Buat kode untuk memberikan label atau kategori pada data berdasarkan tujuan analisis dan aturan yang telah ditentukan. Jelaskan kriteria pelabelan, aturan pemberian label, serta tampilkan distribusi hasil label. Jangan membuat label berdasarkan asumsi tanpa dasar. Jangan melakukan pemodelan machine learning."
+    "badge": "Note :",
+    "desc": "",
+    "cardLabel": "Copy",
+    "text": "### Tahap Persiapan Data\n1. **Menelaah Data**\nLangkah 1: Eksplorasi data (*Mengenal, memeriksa, dan menafsirkan awal data*)\n2. **Memvalidasi Data**\nLangkah 2: Kualitas data (*Memastikan data benar, lengkap, konsisten, dan cukup*)\n3. **Menentukan Objek Data**\nLangkah 3: Sampling (*Split data latih & uji*); Langkah 4: Seleksi fitur (*Memilih baris dan atribut/kolom yang dipakai hanya berdasarkan analisis data latih*)\n4. **Membersihkan Data**\nLangkah 5: Nilai hilang & data kotor; Langkah 6: Outlier (*Memperbaiki data kosong, ganda, salah format, dan ekstrem menggunakan parameter dari data latih*)\n5. **Konstruksi dan Pelabelan Data**\nLangkah 7: Tipe data; Langkah 8: Transformasi; Langkah 9: Pelabelan (*Mengubah bentuk data, membuat fitur turunan, dan memisahkan fitur `X` serta label `y`*)"
+  },
+  {
+    "badge": "",
+    "desc": "Prompt Awal",
+    "cardLabel": "Copy",
+    "text": "Saya sedang melakukan Data Preparation untuk proyek AI dan Data Science menggunakan Python di Google Colab. Anda bertindak sebagai asisten pemrograman yang membantu saya membuat kode secara bertahap.\n\nKONTEKS PROYEK:\nJudul: Sistem Prediksi Risiko Penyakit Ginjal.\nTujuan: Mengidentifikasi indikasi risiko penyakit ginjal berdasarkan parameter kesehatan sebagai informasi awal untuk pemeriksaan medis lebih lanjut.\nSumber Dataset: https://www.kaggle.com/datasets/miadul/kidney-disease-risk-dataset/data\nVariabel Target: CKD_Status.\n\nTAHAPAN DATA PREPARATION:\n\nTahap 0: Persiapan Lingkungan.\n\nTahap 1: Menelaah Data.\nLangkah 1: Eksplorasi Data.\n\nTahap 2: Memvalidasi Data.\nLangkah 2: Kualitas Data.\n\nTahap 3: Menentukan Objek Data.\nLangkah 3: Sampling (Split Data Latih dan Data Uji).\nLangkah 4: Seleksi Fitur.\n\nTahap 4: Membersihkan Data.\nLangkah 5: Nilai Hilang dan Data Kotor.\nLangkah 6: Outlier.\n\nTahap 5: Konstruksi dan Pelabelan Data.\nLangkah 7: Tipe Data.\nLangkah 8: Transformasi.\nLangkah 9: Pelabelan.\n\nATURAN PENGERJAAN:\n1. Buat kode hanya sesuai tahap dan langkah yang sedang saya instruksikan.\n2. Jangan mengerjakan langkah berikutnya sebelum saya meminta.\n3. Gunakan struktur dan nama kolom sesuai dataset asli.\n4. Buat kode sederhana, sistematis, dan mudah dipahami.\n5. Jangan mengubah dataset asli secara langsung.\n6. Jangan melakukan proses di luar tujuan langkah yang sedang dikerjakan.\n7. Berikan penjelasan singkat untuk setiap kode.\n8. Tunggu hasil eksekusi Google Colab dari saya sebelum melanjutkan ke langkah berikutnya.\n9. Hindari data leakage, khususnya pada variabel target CKD_Status.\n10. Parameter pengolahan yang dipelajari dari data harus menggunakan data latih saja, kemudian diterapkan secara konsisten pada data uji.\n11. Jika suatu proses tidak diperlukan, jelaskan alasannya dan jangan dipaksakan.\n\nUntuk saat ini, pahami instruksi dan konteks proyek terlebih dahulu. Jangan membuat kode apa pun sampai saya meminta untuk memulai Tahap 0: Persiapan Lingkungan."
+  },
+  {
+    "badge": "",
+    "desc": "Tahap 0 – Persiapan Lingkungan",
+    "cardLabel": "Copy",
+    "text": "Mulai Tahap 0: Persiapan Lingkungan. Buat kode Python untuk menyiapkan Google Colab, mengimpor library yang diperlukan, membaca dataset dari Kaggle atau file yang saya unggah, dan memastikan dataset berhasil dimuat. Tampilkan informasi singkat mengenai dataset. Jangan melakukan eksplorasi, pemeriksaan kualitas, atau perubahan data."
+  },
+  {
+    "badge": "",
+    "desc": "Tahap 1 – Menelaah Data",
+    "cardLabel": "Langkah 1: Eksplorasi Data",
+    "text": "Kerjakan Langkah 1: Eksplorasi Data. Buat kode untuk menampilkan dimensi dataset, nama kolom, tipe data awal, sampel data, statistik deskriptif, dan distribusi nilai setiap kolom yang relevan. Fokus hanya memahami karakteristik dataset. Jangan melakukan validasi, pembersihan, atau perubahan data."
+  },
+  {
+    "badge": "",
+    "desc": "Tahap 2 – Memvalidasi Data",
+    "cardLabel": "Langkah 2: Kualitas Data",
+    "text": "Kerjakan Langkah 2: Kualitas Data. Buat kode untuk memeriksa kelengkapan, konsistensi, duplikasi, format, dan kesesuaian nilai setiap kolom. Tampilkan hasil pemeriksaan dalam bentuk tabel atau ringkasan. Jangan memperbaiki, menghapus, atau mengubah data."
+  },
+  {
+    "badge": "",
+    "desc": "Tahap 3 – Menentukan Objek Data",
+    "cardLabel": "Langkah 3: Sampling",
+    "text": "Kerjakan Langkah 3: Sampling. Buat kode untuk membagi dataset menjadi data latih dan data uji (train-test split). Gunakan pembagian yang sesuai, misalnya 80:20, serta pertimbangkan stratifikasi berdasarkan CKD_Status jika diperlukan. Pastikan pembagian dilakukan sebelum proses seleksi fitur dan pembersihan yang memerlukan pembelajaran parameter dari data. Tampilkan jumlah dan distribusi kelas pada masing-masing data. Jangan melakukan proses lainnya."
+  },
+  {
+    "badge": "",
+    "desc": "",
+    "cardLabel": "Langkah 4: Seleksi Fitur",
+    "text": "Kerjakan Langkah 4: Seleksi Fitur. Buat kode untuk memilih fitur yang relevan dalam memprediksi CKD_Status berdasarkan analisis data latih saja. Jangan menggunakan data uji untuk menentukan fitur. Pertahankan variabel target sebagai label. Tampilkan daftar fitur terpilih dan alasan pemilihannya. Jangan melakukan transformasi atau pemodelan."
+  },
+  {
+    "badge": "",
+    "desc": "Tahap 4 – Membersihkan Data",
+    "cardLabel": "Langkah 5: Nilai Hilang dan Data Kotor",
+    "text": "Kerjakan Langkah 5: Nilai Hilang dan Data Kotor. Buat kode untuk menangani missing values, duplikasi, kesalahan penulisan, dan format tidak konsisten. Tentukan metode penanganan berdasarkan data latih, kemudian terapkan parameter yang sama pada data uji. Jangan menggunakan informasi data uji untuk menentukan nilai pengganti. Jangan menangani outlier atau melakukan transformasi."
+  },
+  {
+    "badge": "",
+    "desc": "",
+    "cardLabel": "Langkah 6: Outlier",
+    "text": "Kerjakan Langkah 6: Outlier. Buat kode untuk mengidentifikasi outlier pada fitur numerik menggunakan metode yang sesuai seperti IQR. Tentukan batas outlier berdasarkan data latih dan terapkan aturan yang konsisten pada data uji. Tampilkan hasil identifikasi dan rekomendasi penanganan. Jangan otomatis menghapus atau mengubah nilai ekstrem tanpa alasan yang jelas."
+  },
+  {
+    "badge": "",
+    "desc": "Tahap 5 – Konstruksi dan Pelabelan Data",
+    "cardLabel": "Langkah 7: Tipe Data",
+    "text": "Kerjakan Langkah 7: Tipe Data. Periksa dan sesuaikan tipe data setiap kolom berdasarkan karakteristiknya, seperti integer, float, string, datetime, atau kategori. Tampilkan tipe data sebelum dan sesudah penyesuaian. Jangan melakukan transformasi nilai atau pelabelan."
+  },
+  {
+    "badge": "",
+    "desc": "",
+    "cardLabel": "Langkah 8: Transformasi",
+    "text": "Kerjakan Langkah 8: Transformasi Data. Buat kode untuk melakukan transformasi yang diperlukan, seperti encoding, normalisasi, atau standardisasi. Pelajari parameter transformasi dari data latih saja, kemudian terapkan pada data uji menggunakan parameter yang sama. Pastikan tidak terjadi data leakage dan jangan melakukan transformasi yang tidak diperlukan. Jangan melakukan pemodelan machine learning."
+  },
+  {
+    "badge": "",
+    "desc": "",
+    "cardLabel": "Langkah 9: Pelabelan",
+    "text": "Kerjakan Langkah 9: Pelabelan Data. Periksa variabel target CKD_Status dan pastikan labelnya sesuai dengan kebutuhan prediksi. Jika diperlukan pelabelan ulang, gunakan aturan yang memiliki dasar dari dataset dan konsisten pada kedua data. Pisahkan fitur sebagai X dan variabel target sebagai y untuk data latih dan data uji. Tampilkan distribusi kelas serta bentuk akhir X_train, X_test, y_train, dan y_test. Jangan mengubah makna label atau membuat label berdasarkan asumsi."
   }
 ];
   </script>
