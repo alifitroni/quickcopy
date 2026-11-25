@@ -909,124 +909,9 @@ Jelaskan bahwa antarmuka GitHub dan Streamlit bisa berubah, sehingga nama tombol
           </div>
           <div class="item-edit-toolbar">
             <button class="btn btn-secondary" onclick="moveItem(7, -1)">↑ Naik</button>
-            <button class="btn btn-secondary" onclick="moveItem(7, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="moveItem(7, 1)" disabled="">↓ Turun</button>
             <button class="btn btn-secondary" onclick="openEditModal(7)">Edit</button>
             <button class="btn btn-danger" onclick="deleteItem(7)">Hapus</button>
-          </div>
-        </div><div class="item-section">
-          
-          
-          <div class="copy-card">
-            <div class="card-top">
-              <span class="card-label">Langkah 17</span>
-              <div class="card-actions">
-                <button class="icon-btn" title="Salin Teks" onclick="copyText(8, this)">
-                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
-                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
-                  </svg>
-                </button>
-                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(8)">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="15 3 21 3 21 9"></polyline>
-                    <polyline points="9 21 3 21 3 15"></polyline>
-                    <line x1="21" y1="3" x2="14" y2="10"></line>
-                    <line x1="3" y1="21" x2="10" y2="14"></line>
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <div class="card-body">LANGKAH 17 — DEPLOYMENT STREAMLIT
-Gunakan model final, threshold, dan jenis skor dari Langkah 15. Jangan melatih ulang model.
-
-Periksa dulu: model final, threshold, jenis skor, selected_features, tipe dan urutan fitur, serta apakah ada transformasi dari Langkah 5–8 (imputasi, encoding, scaling, batas outlier, fitur turunan) yang berada di luar pipeline. Jika ada, sertakan transformasi itu pada artefak yang disimpan agar input mentah dari form bisa diproses sama seperti saat pelatihan.
-
-A. Simpan ke OUTPUT_DIR (Google Drive, mount dan buat folder jika belum ada):
-1. Pipeline lengkap dengan joblib sebagai model.joblib.
-2. metadata.json berisi threshold, jenis skor (probabilitas atau decision score), selected_features, kelas positif dan pemetaan label, serta tipe dan rentang input dari data latih mentah saja (bukan dari data uji, dan bukan dari data yang sudah diskalakan).
-
-B. Buat dan simpan ke OUTPUT_DIR: app.py, model.joblib, metadata.json, requirements.txt (versi library sesuai lingkungan saat model disimpan).
-app.py harus membaca model.joblib dan metadata.json dari folder yang sama dengan app.py (gunakan pathlib dan Path(__file__).parent), bukan dari path Colab atau Drive, agar tetap berjalan setelah dipindahkan ke GitHub.
-
-C. Fitur aplikasi (bahasa Indonesia, modern, sederhana, profesional, responsif, mudah dipakai pengguna umum):
-1. Judul: "Sistem Prediksi Risiko Penyakit Ginjal Kronis (CKD)".
-2. Form input dengan nama, tipe, dan urutan sesuai selected_features dan model final.
-3. Tombol Prediksi.
-4. Hasil berupa kategori "Terindikasi CKD" atau "Tidak terindikasi CKD", ditampilkan jelas.
-5. Probabilitas hanya jika model memakai predict_proba. Decision score tidak boleh ditampilkan sebagai probabilitas.
-6. Threshold dan jenis skor harus sama seperti di Langkah 15.
-7. Penjelasan singkat mengenai hasil prediksi.
-8. Disclaimer: aplikasi hanya untuk edukasi dan penelitian, bukan alat diagnosis medis.
-
-D. Ketentuan teknis:
-1. Preprocessing berjalan lewat pipeline yang tersimpan.
-2. Tangani input kosong, tidak valid, atau di luar rentang dengan pesan yang jelas.
-3. Rentang input dihitung dari data latih mentah saja (nilai minimum dan maksimum). Jangan mengarang rentang medis, dan jelaskan jika perlu.
-4. Semua file bisa dipakai bersama tanpa melatih model ulang.
-
-E. Setelah semua tersimpan, tampilkan daftar file di OUTPUT_DIR beserta ukurannya untuk konfirmasi.
-
-Berikan: kode app.py, kode penyimpanan model dan metadata, requirements.txt, petunjuk menjalankan lokal (streamlit run app.py), dan petunjuk deployment ke Streamlit Community Cloud lewat GitHub.</div>
-          </div>
-          <div class="item-edit-toolbar">
-            <button class="btn btn-secondary" onclick="moveItem(8, -1)">↑ Naik</button>
-            <button class="btn btn-secondary" onclick="moveItem(8, 1)">↓ Turun</button>
-            <button class="btn btn-secondary" onclick="openEditModal(8)">Edit</button>
-            <button class="btn btn-danger" onclick="deleteItem(8)">Hapus</button>
-          </div>
-        </div><div class="item-section">
-          
-          
-          <div class="copy-card">
-            <div class="card-top">
-              <span class="card-label">Langkah 18</span>
-              <div class="card-actions">
-                <button class="icon-btn" title="Salin Teks" onclick="copyText(9, this)">
-                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
-                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
-                  </svg>
-                </button>
-                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(9)">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="15 3 21 3 21 9"></polyline>
-                    <polyline points="9 21 3 21 3 15"></polyline>
-                    <line x1="21" y1="3" x2="14" y2="10"></line>
-                    <line x1="3" y1="21" x2="10" y2="14"></line>
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <div class="card-body">LANGKAH 18 — VERSI HTML MANDIRI (OPSIONAL)
-Buat versi HTML statis dari model final tanpa server Python. Jangan melatih ulang model. Simpan model.onnx dan index.html ke OUTPUT_DIR.
-
-A. Periksa dulu apakah seluruh pipeline final bisa dikonversi ke ONNX (skl2onnx). Jika ada bagian yang tidak didukung (misalnya transformer kustom), jelaskan dan usulkan solusinya sebelum lanjut.
-
-B. Ekspor pipeline lengkap ke model.onnx. Verifikasi bahwa prediksi ONNX sama dengan pipeline asli pada beberapa sampel data latih (bukan data uji), termasuk skor yang dipakai untuk threshold.
-
-C. Buat satu file index.html berisi:
-1. Form input dengan nama, tipe, dan urutan sesuai selected_features.
-2. onnxruntime-web untuk menjalankan model di browser.
-3. Threshold dan jenis skor dari Langkah 15.
-4. Hasil "Terindikasi CKD" atau "Tidak terindikasi CKD". Probabilitas hanya jika model menghasilkan probabilitas, dan decision score tidak boleh ditampilkan sebagai probabilitas.
-5. Penjelasan singkat hasil dan disclaimer bahwa ini bukan diagnosis medis.
-6. Tampilan modern, sederhana, profesional, responsif, dan berbahasa Indonesia.
-
-D. Embed model.onnx sebagai base64 di dalam index.html agar bisa dibuka langsung dari komputer maupun di-host sebagai halaman statis (GitHub Pages), tanpa fetch ke file lain.
-
-E. Jika preprocessing (encoding, scaling, imputasi) tidak ikut masuk ONNX, tulis ulang di JavaScript dengan parameter yang persis sama dari pipeline, lalu verifikasi hasilnya sama.
-
-F. Validasi input: tangani nilai kosong atau tidak valid. Rentang input dihitung dari data latih mentah saja, jangan mengarang rentang medis.
-
-G. Tampilkan daftar file di OUTPUT_DIR beserta ukurannya setelah selesai.
-
-Berikan: kode ekspor ONNX, kode verifikasi kesamaan prediksi, file index.html lengkap, dan petunjuk membuka serta mengunggahnya ke GitHub Pages.</div>
-          </div>
-          <div class="item-edit-toolbar">
-            <button class="btn btn-secondary" onclick="moveItem(9, -1)">↑ Naik</button>
-            <button class="btn btn-secondary" onclick="moveItem(9, 1)" disabled="">↓ Turun</button>
-            <button class="btn btn-secondary" onclick="openEditModal(9)">Edit</button>
-            <button class="btn btn-danger" onclick="deleteItem(9)">Hapus</button>
           </div>
         </div></div>
 
@@ -1055,7 +940,7 @@ Berikan: kode ekspor ONNX, kode verifikasi kesamaan prediksi, file index.html le
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2">
       <polyline points="20 6 9 17 4 12"></polyline>
     </svg>
-    <span id="toastMsg">Perubahan berhasil disimpan di layar!</span>
+    <span id="toastMsg">Seluruh kode HTML terbaru berhasil disalin ke clipboard!</span>
   </div>
 
   <!-- Add / Edit Modal -->
@@ -1161,18 +1046,6 @@ Berikan: kode ekspor ONNX, kode verifikasi kesamaan prediksi, file index.html le
     "desc": "",
     "cardLabel": "Langkah 16",
     "text": "LANGKAH 16 — DEPLOY KE WEBSITE (Streamlit Community Cloud)\n\nTujuan: menampilkan aplikasi dari Langkah 15 sebagai website publik dengan link yang bisa dibuka siapa saja. Jangan melatih ulang model dan jangan mengubah isi model.joblib.\n\nA. Periksa file di OUTPUT_DIR:\n1. Pastikan ada app.py, model.joblib, metadata.json, requirements.txt, dan file pendukung lain jika ada.\n2. Tampilkan ukuran tiap file. Jika ada file di atas 25 MB (batas unggah lewat browser GitHub), jelaskan solusinya.\n3. Periksa requirements.txt: versi scikit-learn harus sama dengan yang dipakai saat model disimpan, dan streamlit sudah tercantum. Jelaskan singkat bahwa versi yang berbeda adalah penyebab umum aplikasi gagal membuka model.\n4. Pastikan app.py tidak memuat path Drive atau Colab dan tidak memuat data pasien asli.\n\nB. Berikan panduan langkah demi langkah untuk pemula, dalam urutan:\n1. Membuat akun GitHub dan repository publik baru.\n2. Mengunggah semua file (tanpa folder tambahan) ke repository lewat browser.\n3. Membuat akun Streamlit Community Cloud dan menghubungkannya ke GitHub.\n4. Membuat aplikasi baru: pilih repository, branch, dan file utama app.py, lalu klik Deploy.\n5. Menunggu proses build, lalu membuka link aplikasi.\nTulis juga cara memperbarui aplikasi jika file diganti, dan catatan bahwa aplikasi gratis bisa \"tertidur\" jika lama tidak dibuka.\n\nC. Berikan daftar periksa setelah deploy: form tampil, tombol Prediksi berfungsi, hasil dan disclaimer muncul, dan prediksi untuk satu contoh data latih sama dengan hasil di Colab.\n\nD. Berikan daftar masalah umum beserta solusi singkat: ModuleNotFoundError, versi scikit-learn tidak cocok, file tidak ditemukan, dan aplikasi lambat atau tertidur.\n\nJelaskan bahwa antarmuka GitHub dan Streamlit bisa berubah, sehingga nama tombol bisa sedikit berbeda dari panduan."
-  },
-  {
-    "badge": "",
-    "desc": "",
-    "cardLabel": "Langkah 17",
-    "text": "LANGKAH 17 — DEPLOYMENT STREAMLIT\nGunakan model final, threshold, dan jenis skor dari Langkah 15. Jangan melatih ulang model.\n\nPeriksa dulu: model final, threshold, jenis skor, selected_features, tipe dan urutan fitur, serta apakah ada transformasi dari Langkah 5–8 (imputasi, encoding, scaling, batas outlier, fitur turunan) yang berada di luar pipeline. Jika ada, sertakan transformasi itu pada artefak yang disimpan agar input mentah dari form bisa diproses sama seperti saat pelatihan.\n\nA. Simpan ke OUTPUT_DIR (Google Drive, mount dan buat folder jika belum ada):\n1. Pipeline lengkap dengan joblib sebagai model.joblib.\n2. metadata.json berisi threshold, jenis skor (probabilitas atau decision score), selected_features, kelas positif dan pemetaan label, serta tipe dan rentang input dari data latih mentah saja (bukan dari data uji, dan bukan dari data yang sudah diskalakan).\n\nB. Buat dan simpan ke OUTPUT_DIR: app.py, model.joblib, metadata.json, requirements.txt (versi library sesuai lingkungan saat model disimpan).\napp.py harus membaca model.joblib dan metadata.json dari folder yang sama dengan app.py (gunakan pathlib dan Path(__file__).parent), bukan dari path Colab atau Drive, agar tetap berjalan setelah dipindahkan ke GitHub.\n\nC. Fitur aplikasi (bahasa Indonesia, modern, sederhana, profesional, responsif, mudah dipakai pengguna umum):\n1. Judul: \"Sistem Prediksi Risiko Penyakit Ginjal Kronis (CKD)\".\n2. Form input dengan nama, tipe, dan urutan sesuai selected_features dan model final.\n3. Tombol Prediksi.\n4. Hasil berupa kategori \"Terindikasi CKD\" atau \"Tidak terindikasi CKD\", ditampilkan jelas.\n5. Probabilitas hanya jika model memakai predict_proba. Decision score tidak boleh ditampilkan sebagai probabilitas.\n6. Threshold dan jenis skor harus sama seperti di Langkah 15.\n7. Penjelasan singkat mengenai hasil prediksi.\n8. Disclaimer: aplikasi hanya untuk edukasi dan penelitian, bukan alat diagnosis medis.\n\nD. Ketentuan teknis:\n1. Preprocessing berjalan lewat pipeline yang tersimpan.\n2. Tangani input kosong, tidak valid, atau di luar rentang dengan pesan yang jelas.\n3. Rentang input dihitung dari data latih mentah saja (nilai minimum dan maksimum). Jangan mengarang rentang medis, dan jelaskan jika perlu.\n4. Semua file bisa dipakai bersama tanpa melatih model ulang.\n\nE. Setelah semua tersimpan, tampilkan daftar file di OUTPUT_DIR beserta ukurannya untuk konfirmasi.\n\nBerikan: kode app.py, kode penyimpanan model dan metadata, requirements.txt, petunjuk menjalankan lokal (streamlit run app.py), dan petunjuk deployment ke Streamlit Community Cloud lewat GitHub."
-  },
-  {
-    "badge": "",
-    "desc": "",
-    "cardLabel": "Langkah 18",
-    "text": "LANGKAH 18 — VERSI HTML MANDIRI (OPSIONAL)\nBuat versi HTML statis dari model final tanpa server Python. Jangan melatih ulang model. Simpan model.onnx dan index.html ke OUTPUT_DIR.\n\nA. Periksa dulu apakah seluruh pipeline final bisa dikonversi ke ONNX (skl2onnx). Jika ada bagian yang tidak didukung (misalnya transformer kustom), jelaskan dan usulkan solusinya sebelum lanjut.\n\nB. Ekspor pipeline lengkap ke model.onnx. Verifikasi bahwa prediksi ONNX sama dengan pipeline asli pada beberapa sampel data latih (bukan data uji), termasuk skor yang dipakai untuk threshold.\n\nC. Buat satu file index.html berisi:\n1. Form input dengan nama, tipe, dan urutan sesuai selected_features.\n2. onnxruntime-web untuk menjalankan model di browser.\n3. Threshold dan jenis skor dari Langkah 15.\n4. Hasil \"Terindikasi CKD\" atau \"Tidak terindikasi CKD\". Probabilitas hanya jika model menghasilkan probabilitas, dan decision score tidak boleh ditampilkan sebagai probabilitas.\n5. Penjelasan singkat hasil dan disclaimer bahwa ini bukan diagnosis medis.\n6. Tampilan modern, sederhana, profesional, responsif, dan berbahasa Indonesia.\n\nD. Embed model.onnx sebagai base64 di dalam index.html agar bisa dibuka langsung dari komputer maupun di-host sebagai halaman statis (GitHub Pages), tanpa fetch ke file lain.\n\nE. Jika preprocessing (encoding, scaling, imputasi) tidak ikut masuk ONNX, tulis ulang di JavaScript dengan parameter yang persis sama dari pipeline, lalu verifikasi hasilnya sama.\n\nF. Validasi input: tangani nilai kosong atau tidak valid. Rentang input dihitung dari data latih mentah saja, jangan mengarang rentang medis.\n\nG. Tampilkan daftar file di OUTPUT_DIR beserta ukurannya setelah selesai.\n\nBerikan: kode ekspor ONNX, kode verifikasi kesamaan prediksi, file index.html lengkap, dan petunjuk membuka serta mengunggahnya ke GitHub Pages."
   }
 ];
   </script>
