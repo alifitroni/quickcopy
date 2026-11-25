@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Copy - Sistem Prediksi Risiko Penyakit Ginjal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #090a0f;
+      --card-bg: #1e2025;
+      --card-header: #262930;
+      --border-color: #2e323b;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-sub: #cbd5e1;
+      --accent-blue: #0284c7;
+      --accent-blue-bg: rgba(2, 132, 199, 0.15);
+      --accent-green: #10b981;
+      --btn-hover: #333842;
+      --danger: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.6;
+      padding-bottom: 80px;
+      min-height: 100vh;
+    }
+
+    /* Top Navigation Bar */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(9, 10, 15, 0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 14px 20px;
+    }
+
+    .header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: -0.3px;
+    }
+
+    .brand-icon {
+      background: linear-gradient(135deg, #0ea5e9, #6366f1);
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background: #0284c7;
+      color: #ffffff;
+    }
+    .btn-primary:hover {
+      background: #0369a1;
+    }
+
+    .btn-secondary {
+      background: #1e222b;
+      color: var(--text-main);
+      border-color: var(--border-color);
+    }
+    .btn-secondary:hover {
+      background: var(--btn-hover);
+      border-color: #475569;
+    }
+
+    .btn-success {
+      background: #059669;
+      color: #ffffff;
+    }
+    .btn-success:hover {
+      background: #047857;
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.25);
+    }
+
+    /* Container */
+    .container {
+      max-width: 900px;
+      margin: 28px auto;
+      padding: 0 16px;
+    }
+
+    /* Search Bar */
+    .search-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      align-items: center;
+    }
+
+    .search-input-wrapper {
+      position: relative;
+      flex: 1;
+    }
+
+    .search-input-wrapper svg {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px 14px 10px 42px;
+      background: #14171f;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      color: var(--text-main);
+      font-size: 0.9rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-input:focus {
+      border-color: #38bdf8;
+    }
+
+    /* Section Item */
+    .item-section {
+      margin-bottom: 32px;
+      position: relative;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Pill Tag (Langkah 9 - Pelabelan) */
+    .tag-badge {
+      display: inline-block;
+      background: var(--accent-blue-bg);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      padding: 3px 12px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    /* Description (Tujuan: ...) */
+    .item-desc {
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .item-desc strong {
+      color: #ffffff;
+    }
+
+    /* Copy Card */
+    .copy-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      transition: border-color 0.2s;
+    }
+
+    .copy-card:hover {
+      border-color: #3f4553;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+      background: transparent;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .card-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .card-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .icon-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .icon-btn:hover {
+      background: var(--btn-hover);
+      color: var(--text-main);
+    }
+
+    .icon-btn.copied {
+      color: var(--accent-green) !important;
+    }
+
+    .card-body {
+      padding: 16px 20px;
+      color: #e2e8f0;
+      font-size: 0.95rem;
+      line-height: 1.65;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: inherit;
+    }
+
+    /* Edit controls toolbar per item */
+    .item-edit-toolbar {
+      display: none;
+      justify-content: flex-end;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    body.edit-mode .item-edit-toolbar {
+      display: flex;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0f172a;
+      border: 1px solid #38bdf8;
+      color: #ffffff;
+      padding: 12px 18px;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Modal Styling */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: #151821;
+      border: 1px solid var(--border-color);
+      width: 100%;
+      max-width: 600px;
+      border-radius: 14px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+      animation: modalIn 0.25s ease;
+    }
+
+    @keyframes modalIn {
+      from { transform: scale(0.96); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .modal-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-height: 75vh;
+      overflow-y: auto;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-input, .form-textarea {
+      background: #0e1017;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-main);
+      padding: 10px 14px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus, .form-textarea:focus {
+      border-color: #38bdf8;
+    }
+
+    .form-textarea {
+      min-height: 140px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .modal-footer {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      background: #11131a;
+    }
+
+    /* Expand Modal Text */
+    .expand-content {
+      background: #090a0f;
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    /* Bottom Info Banner */
+    .html-sync-banner {
+      background: rgba(30, 41, 59, 0.4);
+      border: 1px dashed var(--border-color);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-top: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .html-sync-banner p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .html-sync-banner p strong {
+      color: var(--text-sub);
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 50px 20px;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 600px) {
+      .header-inner {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .nav-actions {
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body >
+
+  <!-- Header -->
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+          </svg>
+        </div>
+        <span>QuickCopy Hub</span>
+      </div>
+
+      <div class="nav-actions">
+        <button class="btn btn-primary" id="toggleEditBtn" onclick="toggleEditMode()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+          </svg>
+          <span id="editBtnText">Selesai Edit</span>
+        </button>
+
+        <button class="btn btn-primary" onclick="openAddModal()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Tambah Teks
+        </button>
+
+        <button class="btn btn-secondary" onclick="copyFullHTMLCode()" title="Salin seluruh kode HTML yang sudah diperbarui">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+          Salin Kode HTML
+        </button>
+
+        <button class="btn btn-success" onclick="downloadCurrentHTML()" title="Download file index.html dengan data terbaru">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Unduh HTML
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <div class="search-bar">
+      <div class="search-input-wrapper">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="searchInput" class="search-input" placeholder="Cari langkah, tujuan, atau teks..." oninput="handleSearch()">
+      </div>
+    </div>
+
+    <!-- Items Container -->
+    <div id="itemsContainer"><div class="item-section">
+          
+          <div class="item-desc">Prompt Awal</div>
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Copy</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(0, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(0)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">Data Preparation langkah 0–9 sudah selesai di notebook ini. Kita lanjut ke pemodelan, evaluasi, interpretasi, dan deployment, dikerjakan bertahap per langkah.
+
+Variabel tersedia: selected_features, TARGET (CKD_Status), X_train, X_test, y_train, y_test. X_train dan X_test sudah berisi selected_features.
+
+Aturan untuk semua langkah:
+1. Jangan mengulang Data Preparation 0–9, jangan membagi ulang data, dan jangan mengubah selected_features, TARGET, X_train, X_test, y_train, maupun y_test. Variabel baru diberi nama yang jelas.
+2. Data uji (X_test/y_test atau padanan mentahnya) hanya dipakai di Langkah 15B. Jangan dipakai untuk CV, pemilihan model, tuning, threshold, atau interpretasi.
+3. Kelas positif CKD adalah label 1 (pastikan y berkode 0/1).
+4. Gunakan StratifiedKFold(n_splits=5, shuffle=True, random_state=42) yang sama di semua langkah, dan random_state=42 pada model yang mendukungnya.
+5. Gunakan Pipeline. Preprocessing yang parameternya dipelajari dari data harus berada di dalam Pipeline dan tidak boleh dilakukan ganda dengan Langkah 5–8.
+6. Sebelum tiap langkah, periksa kode dan hasil sebelumnya. Jangan mengasumsikan variabel yang belum diperiksa keberadaannya.
+7. Kode rapi, ringkas, dan berjalan di Google Colab. Penjelasan singkat dalam bahasa Indonesia yang mudah dipahami.
+8. Kerjakan hanya langkah yang saya berikan, lalu berhenti dan tunggu instruksi berikutnya.
+9. Semua file hasil (model, metadata, aplikasi) disimpan ke Google Drive di folder "Colab Notebooks/Hasil". Gunakan variabel OUTPUT_DIR = "/content/drive/MyDrive/Colab Notebooks/Hasil", mount Drive dan buat folder jika belum ada. Jangan menyimpan ke tempat lain.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(0, -1)" disabled="">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(0, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(0)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(0)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Langkah 10</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(1, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(1)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">LANGKAH 10 — PIPELINE MODEL
+
+A. Periksa kode Langkah 0–9 di notebook ini dan laporkan:
+1. Transformasi yang dilakukan di Langkah 5, 6, dan 8 (imputasi, perbaikan format, outlier, encoding, scaling) beserta cara implementasinya (objek sklearn atau manual dengan pandas).
+2. Nama variabel data latih dan data uji hasil Langkah 3–4 yang belum melewati Langkah 5–8, jika masih ada. Jangan mengasumsikan namanya, periksa dulu.
+3. Apakah parameter transformasi dipelajari dari seluruh X_train sebelum CV (potensi leakage antar-fold), dan apakah seleksi fitur Langkah 4 hanya memakai data latih.
+
+B. Tentukan pendekatan:
+- Jika data sebelum Langkah 5–8 masih tersedia: bangun ulang transformasi Langkah 5–8 sebagai bagian Pipeline (ColumnTransformer, dan FunctionTransformer atau transformer kustom bila perlu) yang di-fit dalam tiap fold. Gunakan nama variabel baru dan jangan ubah X_train, X_test, maupun selected_features. Sebagai uji kesesuaian, bandingkan hasil transformasi pipeline pada data latih mentah dengan X_train yang sudah ada.
+- Jika tidak tersedia: gunakan X_train apa adanya, jelaskan keterbatasan metodologisnya, dan jangan klaim bebas leakage.
+Tampilkan ringkasan pemeriksaan dan pendekatan yang dipilih, lalu minta persetujuan saya sebelum membuat pipeline.
+
+C. Buat pipeline: Logistic Regression, Decision Tree, Random Forest, SVM, KNN, Gradient Boosting.
+- Scaling hanya untuk LR, SVM, dan KNN.
+- Jangan membuat seleksi fitur baru dan jangan memakai X_test.
+Tampilkan struktur tiap pipeline (tabel singkat) dan kodenya. Belum ada CV atau tuning.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(1, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(1, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(1)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(1)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Langkah 11</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(2, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(2)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">LANGKAH 11 — CROSS VALIDATION
+Evaluasi semua pipeline dengan cross_validate pada data latih (X dan y sesuai pendekatan yang dipilih di Langkah 10), return_train_score=True.
+Metrik: accuracy, precision, recall, f1, roc_auc. ROC-AUC dihitung dari probabilitas atau decision score, bukan prediksi kelas. Konfigurasi sama untuk semua model.
+Simpan hasilnya (termasuk skor train dan validation) agar bisa dipakai di Langkah 12 tanpa CV ulang.
+
+Tampilkan:
+- Tabel rata-rata dan standar deviasi tiap metrik.
+- Grafik perbandingan antar model.
+- Kelebihan dan kekurangan tiap model secara singkat.
+- Model paling menjanjikan. F1 adalah metrik utama sementara, tetapi perhatikan Recall karena konteksnya deteksi risiko CKD.
+Belum ada tuning.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(2, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(2, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(2)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(2)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Langkah 12</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(3, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(3)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">LANGKAH 12 — DIAGNOSIS OVERFITTING/UNDERFITTING
+Gunakan hasil cross_validate Langkah 11 (jangan jalankan CV ulang). Fokus pada F1.
+
+Tampilkan: tabel skor train, validation, dan selisihnya per model, serta grafik perbandingannya.
+Beri diagnosis tiap model (overfitting, underfitting, atau generalisasi baik) dengan alasan sederhana. Jangan memakai satu batas selisih yang kaku. Pertimbangkan juga level skor dan standar deviasi.
+Tentukan model yang paling layak dituning berdasarkan F1, Recall, dan selisih train–validation.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(3, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(3, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(3)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(3)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Langkah 13</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(4, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(4)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">LANGKAH 13 — GRIDSEARCHCV
+Tuning model terpilih dari Langkah 12 pada seluruh pipeline (gunakan prefix nama step pada param_grid).
+- GridSearchCV pada data latih dengan CV yang sama.
+- Grid wajar untuk Colab. Sertakan parameter preprocessing hanya jika relevan.
+- scoring multi-metrik (accuracy, precision, recall, f1, roc_auc), refit='f1'.
+- Simpan best_model = pipeline terbaik hasil refit.
+
+Tampilkan: algoritma terpilih, parameter yang diuji, parameter terbaik, best CV score, ringkasan cv_results_ (top kombinasi), dan perbandingan skor CV sebelum dan sesudah tuning.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(4, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(4, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(4)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(4)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Langkah 14</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(5, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(5)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">LANGKAH 14 — KEPUTUSAN MODEL FINAL
+Bandingkan model sebelum dan sesudah tuning memakai hasil Langkah 11 dan cv_results_ Langkah 13 (fold dan metrik yang sama). Jangan menjalankan CV ulang.
+Catat bahwa skor setelah tuning cenderung optimistis karena dipilih dari fold yang sama. Jika ingin lebih adil, lakukan nested CV ringan.
+
+Tampilkan: tabel dan grafik per metrik, perubahan nilainya, dan analisis apakah tuning membantu.
+Tentukan model final (utamakan F1 dan Recall) dan simpan sebagai best_model.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(5, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(5, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(5)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(5)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Langkah 15</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(6, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(6)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">LANGKAH 15 — EVALUASI AKHIR
+
+A. Threshold (hanya dari data training)
+1. Gunakan cross_val_predict (CV yang sama) dengan best_model untuk memperoleh skor out-of-fold kelas 1: predict_proba jika ada, jika tidak decision_function. Jangan menyamakan decision score dengan probabilitas.
+2. Hitung Precision, Recall, F1, dan F2 pada rentang threshold. Tampilkan tabel ringkas dan grafik Precision-Recall terhadap threshold.
+3. Bandingkan kandidat: threshold default (0,5 untuk probabilitas atau 0 untuk decision score), threshold dengan F1 tertinggi, dan threshold dengan F2 tertinggi (F2 lebih menekankan Recall).
+4. Rekomendasikan satu threshold beserta alasannya, dengan mempertimbangkan bahwa konteksnya deteksi risiko CKD (False Negative lebih berbahaya daripada False Positive). Tunggu persetujuan saya sebelum menetapkannya.
+5. Simpan threshold dan jenis skor yang dipakai.
+
+B. Evaluasi data uji (satu kali, tanpa mengubah model atau threshold)
+Jika pipeline dibangun ulang dari data mentah, gunakan data uji mentah yang sesuai, bukan X_test hasil transformasi lama.
+- Accuracy, Precision, Recall, dan F1 dari prediksi berdasarkan threshold. ROC-AUC dari skor.
+- Visualisasi: Confusion Matrix (TP, TN, FP, FN jelas), Classification Report, dan ROC Curve.
+- Interpretasi sederhana: kemampuan mendeteksi CKD, jumlah FP dan FN, risiko kesalahan, dan kelayakan untuk demo.
+Catat bahwa hasil adalah estimasi risiko berdasarkan dataset, bukan diagnosis medis.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(6, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(6, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(6)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(6)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Langkah 16</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(7, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(7)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">LANGKAH 16 — INTERPRETASI FITUR
+Gunakan Permutation Importance pada best_model, selected_features, dan data latih.
+- Hitung pada data validasi per fold: latih klon pipeline pada fold training, permutasi pada fold validasi, n_repeats=10. Skor: F1 (jelaskan jika memakai Recall). best_model tidak diubah.
+- Sesuaikan dengan struktur pipeline agar nama fitur tetap sesuai.
+
+Tampilkan: ranking dan nilai importance (mean ± std), visualisasinya, dan penjelasan fitur paling berpengaruh.
+SHAP boleh sebagai tambahan hanya jika sesuai model dan tidak terlalu berat di Colab.
+Jelaskan bahwa importance menunjukkan kontribusi pada prediksi model, bukan hubungan sebab-akibat medis.
+Catat nama dan urutan fitur untuk deployment.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(7, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(7, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(7)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(7)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Langkah 17</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(8, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(8)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">LANGKAH 17 — DEPLOYMENT STREAMLIT
+Gunakan model final, threshold, dan jenis skor dari Langkah 15. Jangan melatih ulang model.
+
+Periksa dulu: model final, threshold, jenis skor, selected_features, tipe dan urutan fitur, serta apakah ada transformasi dari Langkah 5–8 (imputasi, encoding, scaling, batas outlier, fitur turunan) yang berada di luar pipeline. Jika ada, sertakan transformasi itu pada artefak yang disimpan agar input mentah dari form bisa diproses sama seperti saat pelatihan.
+
+A. Simpan ke OUTPUT_DIR (Google Drive, mount dan buat folder jika belum ada):
+1. Pipeline lengkap dengan joblib sebagai model.joblib.
+2. metadata.json berisi threshold, jenis skor (probabilitas atau decision score), selected_features, kelas positif dan pemetaan label, serta tipe dan rentang input dari data mentah (bukan dari data yang sudah diskalakan).
+
+B. Buat dan simpan ke OUTPUT_DIR: app.py, model.joblib, metadata.json, requirements.txt (versi library sesuai lingkungan saat model disimpan).
+app.py harus membaca model.joblib dan metadata.json dari folder yang sama dengan app.py (gunakan pathlib dan Path(__file__).parent), bukan dari path Colab atau Drive, agar tetap berjalan setelah dipindahkan ke GitHub.
+
+C. Fitur aplikasi (bahasa Indonesia, modern, sederhana, profesional, responsif, mudah dipakai pengguna umum):
+1. Judul: "Sistem Prediksi Risiko Penyakit Ginjal Kronis (CKD)".
+2. Form input dengan nama, tipe, dan urutan sesuai selected_features dan model final.
+3. Tombol Prediksi.
+4. Hasil berupa kategori "Terindikasi CKD" atau "Tidak terindikasi CKD", ditampilkan jelas.
+5. Probabilitas hanya jika model memakai predict_proba. Decision score tidak boleh ditampilkan sebagai probabilitas.
+6. Threshold dan jenis skor harus sama seperti di Langkah 15.
+7. Penjelasan singkat mengenai hasil prediksi.
+8. Disclaimer: aplikasi hanya untuk edukasi dan penelitian, bukan alat diagnosis medis.
+
+D. Ketentuan teknis:
+1. Preprocessing berjalan lewat pipeline yang tersimpan.
+2. Tangani input kosong, tidak valid, atau di luar rentang dengan pesan yang jelas.
+3. Rentang input berdasarkan karakteristik dataset. Jangan mengarang rentang medis, dan jelaskan jika perlu.
+4. Semua file bisa dipakai bersama tanpa melatih model ulang.
+
+E. Setelah semua tersimpan, tampilkan daftar file di OUTPUT_DIR beserta ukurannya untuk konfirmasi.
+
+Berikan: kode app.py, kode penyimpanan model dan metadata, requirements.txt, petunjuk menjalankan lokal (streamlit run app.py), dan petunjuk deployment ke Streamlit Community Cloud lewat GitHub.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(8, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(8, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(8)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(8)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Langkah 18</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(9, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(9)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">LANGKAH 18 — VERSI HTML MANDIRI (OPSIONAL)
+Buat versi HTML statis dari model final tanpa server Python. Jangan melatih ulang model. Simpan model.onnx dan index.html ke OUTPUT_DIR.
+
+A. Periksa dulu apakah seluruh pipeline final bisa dikonversi ke ONNX (skl2onnx). Jika ada bagian yang tidak didukung (misalnya transformer kustom), jelaskan dan usulkan solusinya sebelum lanjut.
+
+B. Ekspor pipeline lengkap ke model.onnx. Verifikasi bahwa prediksi ONNX sama dengan pipeline asli pada beberapa sampel data latih (bukan data uji), termasuk skor yang dipakai untuk threshold.
+
+C. Buat satu file index.html berisi:
+1. Form input dengan nama, tipe, dan urutan sesuai selected_features.
+2. onnxruntime-web untuk menjalankan model di browser.
+3. Threshold dan jenis skor dari Langkah 15.
+4. Hasil "Terindikasi CKD" atau "Tidak terindikasi CKD". Probabilitas hanya jika model menghasilkan probabilitas, dan decision score tidak boleh ditampilkan sebagai probabilitas.
+5. Penjelasan singkat hasil dan disclaimer bahwa ini bukan diagnosis medis.
+6. Tampilan modern, sederhana, profesional, responsif, dan berbahasa Indonesia.
+
+D. Embed model.onnx sebagai base64 di dalam index.html agar bisa dibuka langsung dari komputer maupun di-host sebagai halaman statis (GitHub Pages), tanpa fetch ke file lain.
+
+E. Jika preprocessing (encoding, scaling, imputasi) tidak ikut masuk ONNX, tulis ulang di JavaScript dengan parameter yang persis sama dari pipeline, lalu verifikasi hasilnya sama.
+
+F. Validasi input: tangani nilai kosong atau tidak valid. Rentang input berdasarkan karakteristik dataset, jangan mengarang rentang medis.
+
+G. Tampilkan daftar file di OUTPUT_DIR beserta ukurannya setelah selesai.
+
+Berikan: kode ekspor ONNX, kode verifikasi kesamaan prediksi, file index.html lengkap, dan petunjuk membuka serta mengunggahnya ke GitHub Pages.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(9, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(9, 1)" disabled="">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(9)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(9)">Hapus</button>
+          </div>
+        </div></div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="empty-state" style="display: none;">
+      <p>Tidak ada teks atau prompt yang cocok.</p>
+    </div>
+
+    <!-- HTML Export/Deploy Hint Banner -->
+    <div class="html-sync-banner">
+      <div>
+        <p><strong>💡 Panduan Deploy ke GitHub:</strong></p>
+        <p>• Data di bawah sudah tertanam murni di file HTML ini (tanpa database dan tanpa masalah cache).</p>
+        <p>• Anda bisa klik <strong>"Salin Kode HTML"</strong>, lalu di web GitHub klik <em>Edit this file</em> (ikon pensil) &gt; Paste &gt; Commit.</p>
+      </div>
+      <div>
+        <button class="btn btn-secondary" onclick="copyFullHTMLCode()">
+          Salin Kode HTML
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+    <span id="toastMsg">Bagian teks baru berhasil ditambahkan!</span>
+  </div>
+
+  <!-- Add / Edit Modal -->
+  <div id="itemModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTitle">Tambah Bagian Teks</h3>
+        <button class="icon-btn" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="editIndex" value="">
+
+        <div class="form-group">
+          <label class="form-label">Label / Tag Badge (Opsional)</label>
+          <input type="text" id="inputBadge" class="form-input" placeholder="Contoh: Langkah 9 – Pelabelan">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Keterangan / Tujuan (Opsional)</label>
+          <input type="text" id="inputDesc" class="form-input" placeholder="Contoh: Tujuan: Memberikan label atau kategori pada data...">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Header Kotak Teks (Opsional)</label>
+          <input type="text" id="inputCardLabel" class="form-input" placeholder="Contoh: Menulis, Prompt AI, Kode, dsb.">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Isi Teks (Yang Akan Di-Copy) *</label>
+          <textarea id="inputText" class="form-textarea" placeholder="Tuliskan teks atau prompt yang ingin disalin di sini..." required=""></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal()">Batal</button>
+        <button class="btn btn-primary" onclick="saveItem()">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fullscreen / Expand Modal -->
+  <div id="expandModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title" id="expandTitle">Detail Teks</h3>
+        <div style="display:flex; gap: 8px;">
+          <button class="btn btn-primary" id="expandCopyBtn" onclick="copyExpandedText()">Salin</button>
+          <button class="icon-btn" onclick="closeExpandModal()">✕</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div id="expandContent" class="expand-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMBEDDED DATA SCRIPT: SEMUA DATA ANDA TERSIMPAN PERMANEN DI SINI -->
+  <script id="initialDataScript">
+    const DEFAULT_ITEMS = [
+  {
+    "badge": "",
+    "desc": "Prompt Awal",
+    "cardLabel": "Copy",
+    "text": "Data Preparation langkah 0–9 sudah selesai di notebook ini. Kita lanjut ke pemodelan, evaluasi, interpretasi, dan deployment, dikerjakan bertahap per langkah.\n\nVariabel tersedia: selected_features, TARGET (CKD_Status), X_train, X_test, y_train, y_test. X_train dan X_test sudah berisi selected_features.\n\nAturan untuk semua langkah:\n1. Jangan mengulang Data Preparation 0–9, jangan membagi ulang data, dan jangan mengubah selected_features, TARGET, X_train, X_test, y_train, maupun y_test. Variabel baru diberi nama yang jelas.\n2. Data uji (X_test/y_test atau padanan mentahnya) hanya dipakai di Langkah 15B. Jangan dipakai untuk CV, pemilihan model, tuning, threshold, atau interpretasi.\n3. Kelas positif CKD adalah label 1 (pastikan y berkode 0/1).\n4. Gunakan StratifiedKFold(n_splits=5, shuffle=True, random_state=42) yang sama di semua langkah, dan random_state=42 pada model yang mendukungnya.\n5. Gunakan Pipeline. Preprocessing yang parameternya dipelajari dari data harus berada di dalam Pipeline dan tidak boleh dilakukan ganda dengan Langkah 5–8.\n6. Sebelum tiap langkah, periksa kode dan hasil sebelumnya. Jangan mengasumsikan variabel yang belum diperiksa keberadaannya.\n7. Kode rapi, ringkas, dan berjalan di Google Colab. Penjelasan singkat dalam bahasa Indonesia yang mudah dipahami.\n8. Kerjakan hanya langkah yang saya berikan, lalu berhenti dan tunggu instruksi berikutnya.\n9. Semua file hasil (model, metadata, aplikasi) disimpan ke Google Drive di folder \"Colab Notebooks/Hasil\". Gunakan variabel OUTPUT_DIR = \"/content/drive/MyDrive/Colab Notebooks/Hasil\", mount Drive dan buat folder jika belum ada. Jangan menyimpan ke tempat lain."
+  },
+  {
+    "badge": "",
+    "desc": "",
+    "cardLabel": "Langkah 10",
+    "text": "LANGKAH 10 — PIPELINE MODEL\n\nA. Periksa kode Langkah 0–9 di notebook ini dan laporkan:\n1. Transformasi yang dilakukan di Langkah 5, 6, dan 8 (imputasi, perbaikan format, outlier, encoding, scaling) beserta cara implementasinya (objek sklearn atau manual dengan pandas).\n2. Nama variabel data latih dan data uji hasil Langkah 3–4 yang belum melewati Langkah 5–8, jika masih ada. Jangan mengasumsikan namanya, periksa dulu.\n3. Apakah parameter transformasi dipelajari dari seluruh X_train sebelum CV (potensi leakage antar-fold), dan apakah seleksi fitur Langkah 4 hanya memakai data latih.\n\nB. Tentukan pendekatan:\n- Jika data sebelum Langkah 5–8 masih tersedia: bangun ulang transformasi Langkah 5–8 sebagai bagian Pipeline (ColumnTransformer, dan FunctionTransformer atau transformer kustom bila perlu) yang di-fit dalam tiap fold. Gunakan nama variabel baru dan jangan ubah X_train, X_test, maupun selected_features. Sebagai uji kesesuaian, bandingkan hasil transformasi pipeline pada data latih mentah dengan X_train yang sudah ada.\n- Jika tidak tersedia: gunakan X_train apa adanya, jelaskan keterbatasan metodologisnya, dan jangan klaim bebas leakage.\nTampilkan ringkasan pemeriksaan dan pendekatan yang dipilih, lalu minta persetujuan saya sebelum membuat pipeline.\n\nC. Buat pipeline: Logistic Regression, Decision Tree, Random Forest, SVM, KNN, Gradient Boosting.\n- Scaling hanya untuk LR, SVM, dan KNN.\n- Jangan membuat seleksi fitur baru dan jangan memakai X_test.\nTampilkan struktur tiap pipeline (tabel singkat) dan kodenya. Belum ada CV atau tuning."
+  },
+  {
+    "badge": "",
+    "desc": "",
+    "cardLabel": "Langkah 11",
+    "text": "LANGKAH 11 — CROSS VALIDATION\nEvaluasi semua pipeline dengan cross_validate pada data latih (X dan y sesuai pendekatan yang dipilih di Langkah 10), return_train_score=True.\nMetrik: accuracy, precision, recall, f1, roc_auc. ROC-AUC dihitung dari probabilitas atau decision score, bukan prediksi kelas. Konfigurasi sama untuk semua model.\nSimpan hasilnya (termasuk skor train dan validation) agar bisa dipakai di Langkah 12 tanpa CV ulang.\n\nTampilkan:\n- Tabel rata-rata dan standar deviasi tiap metrik.\n- Grafik perbandingan antar model.\n- Kelebihan dan kekurangan tiap model secara singkat.\n- Model paling menjanjikan. F1 adalah metrik utama sementara, tetapi perhatikan Recall karena konteksnya deteksi risiko CKD.\nBelum ada tuning."
+  },
+  {
+    "badge": "",
+    "desc": "",
+    "cardLabel": "Langkah 12",
+    "text": "LANGKAH 12 — DIAGNOSIS OVERFITTING/UNDERFITTING\nGunakan hasil cross_validate Langkah 11 (jangan jalankan CV ulang). Fokus pada F1.\n\nTampilkan: tabel skor train, validation, dan selisihnya per model, serta grafik perbandingannya.\nBeri diagnosis tiap model (overfitting, underfitting, atau generalisasi baik) dengan alasan sederhana. Jangan memakai satu batas selisih yang kaku. Pertimbangkan juga level skor dan standar deviasi.\nTentukan model yang paling layak dituning berdasarkan F1, Recall, dan selisih train–validation."
+  },
+  {
+    "badge": "",
+    "desc": "",
+    "cardLabel": "Langkah 13",
+    "text": "LANGKAH 13 — GRIDSEARCHCV\nTuning model terpilih dari Langkah 12 pada seluruh pipeline (gunakan prefix nama step pada param_grid).\n- GridSearchCV pada data latih dengan CV yang sama.\n- Grid wajar untuk Colab. Sertakan parameter preprocessing hanya jika relevan.\n- scoring multi-metrik (accuracy, precision, recall, f1, roc_auc), refit='f1'.\n- Simpan best_model = pipeline terbaik hasil refit.\n\nTampilkan: algoritma terpilih, parameter yang diuji, parameter terbaik, best CV score, ringkasan cv_results_ (top kombinasi), dan perbandingan skor CV sebelum dan sesudah tuning."
+  },
+  {
+    "badge": "",
+    "desc": "",
+    "cardLabel": "Langkah 14",
+    "text": "LANGKAH 14 — KEPUTUSAN MODEL FINAL\nBandingkan model sebelum dan sesudah tuning memakai hasil Langkah 11 dan cv_results_ Langkah 13 (fold dan metrik yang sama). Jangan menjalankan CV ulang.\nCatat bahwa skor setelah tuning cenderung optimistis karena dipilih dari fold yang sama. Jika ingin lebih adil, lakukan nested CV ringan.\n\nTampilkan: tabel dan grafik per metrik, perubahan nilainya, dan analisis apakah tuning membantu.\nTentukan model final (utamakan F1 dan Recall) dan simpan sebagai best_model."
+  },
+  {
+    "badge": "",
+    "desc": "",
+    "cardLabel": "Langkah 15",
+    "text": "LANGKAH 15 — EVALUASI AKHIR\n\nA. Threshold (hanya dari data training)\n1. Gunakan cross_val_predict (CV yang sama) dengan best_model untuk memperoleh skor out-of-fold kelas 1: predict_proba jika ada, jika tidak decision_function. Jangan menyamakan decision score dengan probabilitas.\n2. Hitung Precision, Recall, F1, dan F2 pada rentang threshold. Tampilkan tabel ringkas dan grafik Precision-Recall terhadap threshold.\n3. Bandingkan kandidat: threshold default (0,5 untuk probabilitas atau 0 untuk decision score), threshold dengan F1 tertinggi, dan threshold dengan F2 tertinggi (F2 lebih menekankan Recall).\n4. Rekomendasikan satu threshold beserta alasannya, dengan mempertimbangkan bahwa konteksnya deteksi risiko CKD (False Negative lebih berbahaya daripada False Positive). Tunggu persetujuan saya sebelum menetapkannya.\n5. Simpan threshold dan jenis skor yang dipakai.\n\nB. Evaluasi data uji (satu kali, tanpa mengubah model atau threshold)\nJika pipeline dibangun ulang dari data mentah, gunakan data uji mentah yang sesuai, bukan X_test hasil transformasi lama.\n- Accuracy, Precision, Recall, dan F1 dari prediksi berdasarkan threshold. ROC-AUC dari skor.\n- Visualisasi: Confusion Matrix (TP, TN, FP, FN jelas), Classification Report, dan ROC Curve.\n- Interpretasi sederhana: kemampuan mendeteksi CKD, jumlah FP dan FN, risiko kesalahan, dan kelayakan untuk demo.\nCatat bahwa hasil adalah estimasi risiko berdasarkan dataset, bukan diagnosis medis."
+  },
+  {
+    "badge": "",
+    "desc": "",
+    "cardLabel": "Langkah 16",
+    "text": "LANGKAH 16 — INTERPRETASI FITUR\nGunakan Permutation Importance pada best_model, selected_features, dan data latih.\n- Hitung pada data validasi per fold: latih klon pipeline pada fold training, permutasi pada fold validasi, n_repeats=10. Skor: F1 (jelaskan jika memakai Recall). best_model tidak diubah.\n- Sesuaikan dengan struktur pipeline agar nama fitur tetap sesuai.\n\nTampilkan: ranking dan nilai importance (mean ± std), visualisasinya, dan penjelasan fitur paling berpengaruh.\nSHAP boleh sebagai tambahan hanya jika sesuai model dan tidak terlalu berat di Colab.\nJelaskan bahwa importance menunjukkan kontribusi pada prediksi model, bukan hubungan sebab-akibat medis.\nCatat nama dan urutan fitur untuk deployment."
+  },
+  {
+    "badge": "",
+    "desc": "",
+    "cardLabel": "Langkah 17",
+    "text": "LANGKAH 17 — DEPLOYMENT STREAMLIT\nGunakan model final, threshold, dan jenis skor dari Langkah 15. Jangan melatih ulang model.\n\nPeriksa dulu: model final, threshold, jenis skor, selected_features, tipe dan urutan fitur, serta apakah ada transformasi dari Langkah 5–8 (imputasi, encoding, scaling, batas outlier, fitur turunan) yang berada di luar pipeline. Jika ada, sertakan transformasi itu pada artefak yang disimpan agar input mentah dari form bisa diproses sama seperti saat pelatihan.\n\nA. Simpan ke OUTPUT_DIR (Google Drive, mount dan buat folder jika belum ada):\n1. Pipeline lengkap dengan joblib sebagai model.joblib.\n2. metadata.json berisi threshold, jenis skor (probabilitas atau decision score), selected_features, kelas positif dan pemetaan label, serta tipe dan rentang input dari data mentah (bukan dari data yang sudah diskalakan).\n\nB. Buat dan simpan ke OUTPUT_DIR: app.py, model.joblib, metadata.json, requirements.txt (versi library sesuai lingkungan saat model disimpan).\napp.py harus membaca model.joblib dan metadata.json dari folder yang sama dengan app.py (gunakan pathlib dan Path(__file__).parent), bukan dari path Colab atau Drive, agar tetap berjalan setelah dipindahkan ke GitHub.\n\nC. Fitur aplikasi (bahasa Indonesia, modern, sederhana, profesional, responsif, mudah dipakai pengguna umum):\n1. Judul: \"Sistem Prediksi Risiko Penyakit Ginjal Kronis (CKD)\".\n2. Form input dengan nama, tipe, dan urutan sesuai selected_features dan model final.\n3. Tombol Prediksi.\n4. Hasil berupa kategori \"Terindikasi CKD\" atau \"Tidak terindikasi CKD\", ditampilkan jelas.\n5. Probabilitas hanya jika model memakai predict_proba. Decision score tidak boleh ditampilkan sebagai probabilitas.\n6. Threshold dan jenis skor harus sama seperti di Langkah 15.\n7. Penjelasan singkat mengenai hasil prediksi.\n8. Disclaimer: aplikasi hanya untuk edukasi dan penelitian, bukan alat diagnosis medis.\n\nD. Ketentuan teknis:\n1. Preprocessing berjalan lewat pipeline yang tersimpan.\n2. Tangani input kosong, tidak valid, atau di luar rentang dengan pesan yang jelas.\n3. Rentang input berdasarkan karakteristik dataset. Jangan mengarang rentang medis, dan jelaskan jika perlu.\n4. Semua file bisa dipakai bersama tanpa melatih model ulang.\n\nE. Setelah semua tersimpan, tampilkan daftar file di OUTPUT_DIR beserta ukurannya untuk konfirmasi.\n\nBerikan: kode app.py, kode penyimpanan model dan metadata, requirements.txt, petunjuk menjalankan lokal (streamlit run app.py), dan petunjuk deployment ke Streamlit Community Cloud lewat GitHub."
+  },
+  {
+    "badge": "",
+    "desc": "",
+    "cardLabel": "Langkah 18",
+    "text": "LANGKAH 18 — VERSI HTML MANDIRI (OPSIONAL)\nBuat versi HTML statis dari model final tanpa server Python. Jangan melatih ulang model. Simpan model.onnx dan index.html ke OUTPUT_DIR.\n\nA. Periksa dulu apakah seluruh pipeline final bisa dikonversi ke ONNX (skl2onnx). Jika ada bagian yang tidak didukung (misalnya transformer kustom), jelaskan dan usulkan solusinya sebelum lanjut.\n\nB. Ekspor pipeline lengkap ke model.onnx. Verifikasi bahwa prediksi ONNX sama dengan pipeline asli pada beberapa sampel data latih (bukan data uji), termasuk skor yang dipakai untuk threshold.\n\nC. Buat satu file index.html berisi:\n1. Form input dengan nama, tipe, dan urutan sesuai selected_features.\n2. onnxruntime-web untuk menjalankan model di browser.\n3. Threshold dan jenis skor dari Langkah 15.\n4. Hasil \"Terindikasi CKD\" atau \"Tidak terindikasi CKD\". Probabilitas hanya jika model menghasilkan probabilitas, dan decision score tidak boleh ditampilkan sebagai probabilitas.\n5. Penjelasan singkat hasil dan disclaimer bahwa ini bukan diagnosis medis.\n6. Tampilan modern, sederhana, profesional, responsif, dan berbahasa Indonesia.\n\nD. Embed model.onnx sebagai base64 di dalam index.html agar bisa dibuka langsung dari komputer maupun di-host sebagai halaman statis (GitHub Pages), tanpa fetch ke file lain.\n\nE. Jika preprocessing (encoding, scaling, imputasi) tidak ikut masuk ONNX, tulis ulang di JavaScript dengan parameter yang persis sama dari pipeline, lalu verifikasi hasilnya sama.\n\nF. Validasi input: tangani nilai kosong atau tidak valid. Rentang input berdasarkan karakteristik dataset, jangan mengarang rentang medis.\n\nG. Tampilkan daftar file di OUTPUT_DIR beserta ukurannya setelah selesai.\n\nBerikan: kode ekspor ONNX, kode verifikasi kesamaan prediksi, file index.html lengkap, dan petunjuk membuka serta mengunggahnya ke GitHub Pages."
+  }
+];
+  </script>
+
+  <script>
+    // Master data in memory directly from DEFAULT_ITEMS
+    let items = [];
+    let isEditMode = false;
+    let currentExpandedText = "";
+
+    function loadData() {
+      // Selalu gunakan data master DEFAULT_ITEMS dari file HTML ini agar bebas dari konflik cache browser!
+      items = JSON.parse(JSON.stringify(DEFAULT_ITEMS));
+    }
+
+    // Render items to DOM
+    function renderItems(filterQuery = "") {
+      const container = document.getElementById("itemsContainer");
+      const emptyState = document.getElementById("emptyState");
+      container.innerHTML = "";
+
+      const query = filterQuery.toLowerCase().trim();
+      const filtered = items.filter(item => {
+        if (!query) return true;
+        return (
+          (item.badge && item.badge.toLowerCase().includes(query)) ||
+          (item.desc && item.desc.toLowerCase().includes(query)) ||
+          (item.cardLabel && item.cardLabel.toLowerCase().includes(query)) ||
+          (item.text && item.text.toLowerCase().includes(query))
+        );
+      });
+
+      if (filtered.length === 0) {
+        emptyState.style.display = "block";
+        return;
+      } else {
+        emptyState.style.display = "none";
+      }
+
+      filtered.forEach((item) => {
+        const realIndex = items.indexOf(item);
+        const section = document.createElement("div");
+        section.className = "item-section";
+
+        let badgeHtml = item.badge ? `<div class="tag-badge">${escapeHtml(item.badge)}</div>` : "";
+        let descHtml = item.desc ? `<div class="item-desc">${formatDesc(item.desc)}</div>` : "";
+        let labelText = item.cardLabel ? escapeHtml(item.cardLabel) : "Teks";
+
+        section.innerHTML = `
+          ${badgeHtml}
+          ${descHtml}
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">${labelText}</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(${realIndex}, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(${realIndex})">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"/>
+                    <polyline points="9 21 3 21 3 15"/>
+                    <line x1="21" y1="3" x2="14" y2="10"/>
+                    <line x1="3" y1="21" x2="10" y2="14"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">${escapeHtml(item.text)}</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(${realIndex}, -1)" ${realIndex === 0 ? "disabled" : ""}>↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(${realIndex}, 1)" ${realIndex === items.length - 1 ? "disabled" : ""}>↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(${realIndex})">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(${realIndex})">Hapus</button>
+          </div>
+        `;
+
+        container.appendChild(section);
+      });
+    }
+
+    function formatDesc(raw) {
+      if (!raw) return "";
+      if (raw.startsWith("<strong>") || raw.includes("<strong>")) {
+        return raw;
+      }
+      if (raw.toLowerCase().startsWith("tujuan:")) {
+        return `<strong>Tujuan:</strong>` + escapeHtml(raw.slice(7));
+      }
+      return escapeHtml(raw);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return "";
+      const div = document.createElement("div");
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    // Copying functionality
+    function copyText(index, btnElement) {
+      const text = items[index].text;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast("Teks berhasil disalin!");
+        if (btnElement) {
+          btnElement.classList.add("copied");
+          btnElement.innerHTML = `
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          `;
+          setTimeout(() => {
+            btnElement.classList.remove("copied");
+            btnElement.innerHTML = `
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+              </svg>
+            `;
+          }, 1500);
+        }
+      }).catch(err => {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+        showToast("Teks berhasil disalin!");
+      });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      const toastMsg = document.getElementById("toastMsg");
+      toastMsg.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2200);
+    }
+
+    // Modal controls
+    function openAddModal() {
+      document.getElementById("modalTitle").textContent = "Tambah Bagian Teks";
+      document.getElementById("editIndex").value = "";
+      document.getElementById("inputBadge").value = "";
+      document.getElementById("inputDesc").value = "";
+      document.getElementById("inputCardLabel").value = "Copy";
+      document.getElementById("inputText").value = "";
+      document.getElementById("itemModal").classList.add("active");
+    }
+
+    function openEditModal(index) {
+      const item = items[index];
+      document.getElementById("modalTitle").textContent = "Edit Bagian Teks";
+      document.getElementById("editIndex").value = index;
+      document.getElementById("inputBadge").value = item.badge || "";
+      document.getElementById("inputDesc").value = item.desc ? item.desc.replace(/<\/?[^>]+(>|$)/g, "") : "";
+      document.getElementById("inputCardLabel").value = item.cardLabel || "";
+      document.getElementById("inputText").value = item.text || "";
+      document.getElementById("itemModal").classList.add("active");
+    }
+
+    function closeModal() {
+      document.getElementById("itemModal").classList.remove("active");
+    }
+
+    function saveItem() {
+      const text = document.getElementById("inputText").value.trim();
+      if (!text) {
+        alert("Isi teks tidak boleh kosong!");
+        return;
+      }
+
+      const badge = document.getElementById("inputBadge").value.trim();
+      let desc = document.getElementById("inputDesc").value.trim();
+      const cardLabel = document.getElementById("inputCardLabel").value.trim() || "Copy";
+      const editIndex = document.getElementById("editIndex").value;
+
+      if (desc && desc.toLowerCase().startsWith("tujuan:")) {
+        desc = "<strong>Tujuan:</strong> " + desc.slice(7).trim();
+      }
+
+      const itemData = { badge, desc, cardLabel, text };
+
+      if (editIndex !== "") {
+        items[parseInt(editIndex, 10)] = itemData;
+        showToast("Perubahan berhasil disimpan di layar!");
+      } else {
+        items.push(itemData);
+        showToast("Bagian teks baru berhasil ditambahkan!");
+      }
+
+      renderItems(document.getElementById("searchInput").value);
+      closeModal();
+    }
+
+    function deleteItem(index) {
+      if (confirm("Apakah Anda yakin ingin menghapus bagian ini?")) {
+        items.splice(index, 1);
+        renderItems(document.getElementById("searchInput").value);
+        showToast("Item berhasil dihapus.");
+      }
+    }
+
+    function moveItem(index, direction) {
+      const newIndex = index + direction;
+      if (newIndex < 0 || newIndex >= items.length) return;
+      const temp = items[index];
+      items[index] = items[newIndex];
+      items[newIndex] = temp;
+      renderItems(document.getElementById("searchInput").value);
+    }
+
+    // Expand view modal
+    function expandText(index) {
+      const item = items[index];
+      currentExpandedText = item.text;
+      document.getElementById("expandTitle").textContent = item.badge || item.cardLabel || "Detail Teks";
+      document.getElementById("expandContent").textContent = item.text;
+      document.getElementById("expandModal").classList.add("active");
+    }
+
+    function closeExpandModal() {
+      document.getElementById("expandModal").classList.remove("active");
+    }
+
+    function copyExpandedText() {
+      navigator.clipboard.writeText(currentExpandedText).then(() => {
+        showToast("Teks berhasil disalin!");
+      });
+    }
+
+    // Toggle Edit Mode UI
+    function toggleEditMode() {
+      isEditMode = !isEditMode;
+      document.body.classList.toggle("edit-mode", isEditMode);
+      const btn = document.getElementById("toggleEditBtn");
+      const btnText = document.getElementById("editBtnText");
+
+      if (isEditMode) {
+        btnText.textContent = "Selesai Edit";
+        btn.classList.remove("btn-secondary");
+        btn.classList.add("btn-primary");
+      } else {
+        btnText.textContent = "Mode Edit";
+        btn.classList.remove("btn-primary");
+        btn.classList.add("btn-secondary");
+      }
+    }
+
+    // Search filter
+    function handleSearch() {
+      const val = document.getElementById("searchInput").value;
+      renderItems(val);
+    }
+
+    // Generate updated HTML string
+    function generateUpdatedHTML() {
+      let htmlContent = document.documentElement.outerHTML;
+
+      // Replace DEFAULT_ITEMS block with current items
+      const newItemsJSON = JSON.stringify(items, null, 2);
+      const replacementScript = `const DEFAULT_ITEMS = ${newItemsJSON};`;
+      htmlContent = htmlContent.replace(/const DEFAULT_ITEMS = \[[\s\S]*?\];/m, replacementScript);
+
+      // Clean up dynamic edit class
+      htmlContent = htmlContent.replace('class="edit-mode"', '');
+
+      return "<!DOCTYPE html>\n<html lang=\"id\">\n" + htmlContent.substring(htmlContent.indexOf("<head>"));
+    }
+
+    // Download HTML
+    function downloadCurrentHTML() {
+      const fullHtml = generateUpdatedHTML();
+      const blob = new Blob([fullHtml], { type: "text/html;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "index.html";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      showToast("File index.html baru berhasil diunduh!");
+    }
+
+    // Copy entire HTML code to clipboard
+    function copyFullHTMLCode() {
+      const fullHtml = generateUpdatedHTML();
+      navigator.clipboard.writeText(fullHtml).then(() => {
+        showToast("Seluruh kode HTML terbaru berhasil disalin ke clipboard!");
+      }).catch(err => {
+        alert("Gagal menyalin otomatis. Silakan gunakan tombol Unduh HTML.");
+      });
+    }
+
+    // Initialize: langsung render dari data master DEFAULT_ITEMS
+    loadData();
+    renderItems();
+  </script>
+
+
+</body></html>
