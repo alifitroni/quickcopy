@@ -567,18 +567,18 @@
                 </button>
               </div>
             </div>
-            <div class="card-body">Data Preparation langkah 0–9 sudah selesai di notebook ini. Kita lanjut ke pemodelan, evaluasi, interpretasi, dan deployment, dikerjakan bertahap per langkah.
+            <div class="card-body">Data Preparation langkah 0–9 sudah selesai di notebook ini. Kita lanjut ke pemodelan, evaluasi, dan deployment, dikerjakan bertahap per langkah. Pengguna adalah pemula, jadi jelaskan dengan bahasa Indonesia yang sederhana dan singkat.
 
 Variabel tersedia: selected_features, TARGET (CKD_Status), X_train, X_test, y_train, y_test. X_train dan X_test sudah berisi selected_features.
 
 Aturan untuk semua langkah:
 1. Jangan mengulang Data Preparation 0–9, jangan membagi ulang data, dan jangan mengubah selected_features, TARGET, X_train, X_test, y_train, maupun y_test. Variabel baru diberi nama yang jelas.
-2. Data uji (X_test/y_test atau padanan mentahnya) hanya dipakai di Langkah 15B. Jangan dipakai untuk CV, pemilihan model, tuning, threshold, atau interpretasi.
+2. Data uji (X_test/y_test atau padanan mentahnya) hanya dipakai di Langkah 14. Jangan dipakai untuk cross validation, pemilihan model, tuning, threshold, atau menentukan rentang input.
 3. Kelas positif CKD adalah label 1 (pastikan y berkode 0/1).
 4. Gunakan StratifiedKFold(n_splits=5, shuffle=True, random_state=42) yang sama di semua langkah, dan random_state=42 pada model yang mendukungnya.
 5. Gunakan Pipeline. Preprocessing yang parameternya dipelajari dari data harus berada di dalam Pipeline dan tidak boleh dilakukan ganda dengan Langkah 5–8.
-6. Sebelum tiap langkah, periksa kode dan hasil sebelumnya. Jangan mengasumsikan variabel yang belum diperiksa keberadaannya.
-7. Kode rapi, ringkas, dan berjalan di Google Colab. Penjelasan singkat dalam bahasa Indonesia yang mudah dipahami.
+6. Sebelum tiap langkah, periksa kode dan hasil sebelumnya. Jangan mengasumsikan variabel yang belum diperiksa keberadaannya. Jika kode Langkah 0–9 tidak terlihat oleh Anda, minta saya menempelkannya, jangan menebak.
+7. Kode rapi, ringkas, dan berjalan di Google Colab. Setelah setiap hasil, berikan penjelasan singkat tentang arti hasil tersebut.
 8. Kerjakan hanya langkah yang saya berikan, lalu berhenti dan tunggu instruksi berikutnya.
 9. Semua file hasil (model, metadata, aplikasi) disimpan ke Google Drive di folder "Colab Notebooks/Hasil". Gunakan variabel OUTPUT_DIR = "/content/drive/MyDrive/Colab Notebooks/Hasil", mount Drive dan buat folder jika belum ada. Jangan menyimpan ke tempat lain.
 
@@ -618,7 +618,7 @@ Konfirmasi pemahaman saja, jangan membuat kode sampai saya meminta Langkah 10.</
 A. Periksa kode Langkah 0–9 di notebook ini dan laporkan:
 1. Transformasi yang dilakukan di Langkah 5, 6, dan 8 (imputasi, perbaikan format, outlier, encoding, scaling) beserta cara implementasinya (objek sklearn atau manual dengan pandas).
 2. Nama variabel data latih dan data uji hasil Langkah 3–4 yang belum melewati Langkah 5–8, jika masih ada. Jangan mengasumsikan namanya, periksa dulu.
-3. Apakah parameter transformasi dipelajari dari seluruh X_train sebelum CV (potensi leakage antar-fold), dan apakah seleksi fitur Langkah 4 hanya memakai data latih.
+3. Apakah parameter transformasi dipelajari dari seluruh X_train sebelum cross validation (potensi leakage antar-fold), dan apakah seleksi fitur Langkah 4 hanya memakai data latih.
 
 B. Tentukan pendekatan:
 - Jika data sebelum Langkah 5–8 masih tersedia: bangun ulang transformasi Langkah 5–8 sebagai bagian Pipeline (ColumnTransformer, dan FunctionTransformer atau transformer kustom bila perlu) yang di-fit dalam tiap fold. Gunakan nama variabel baru dan jangan ubah X_train, X_test, maupun selected_features. Sebagai uji kesesuaian, bandingkan hasil transformasi pipeline pada data latih mentah dengan X_train yang sudah ada.
@@ -627,8 +627,9 @@ Tampilkan ringkasan pemeriksaan dan pendekatan yang dipilih, lalu minta persetuj
 
 C. Buat pipeline: Logistic Regression, Decision Tree, Random Forest, SVM, KNN, Gradient Boosting.
 - Scaling hanya untuk LR, SVM, dan KNN.
+- Periksa distribusi kelas y_train. Jika tidak seimbang, tampilkan dan jelaskan, serta tawarkan class_weight='balanced' di dalam pipeline untuk model yang mendukungnya. Jangan memakai oversampling di luar pipeline.
 - Jangan membuat seleksi fitur baru dan jangan memakai X_test.
-Tampilkan struktur tiap pipeline (tabel singkat) dan kodenya. Belum ada CV atau tuning.</div>
+Tampilkan struktur tiap pipeline (tabel singkat) dan kodenya. Belum ada cross validation atau tuning.</div>
           </div>
           <div class="item-edit-toolbar">
             <button class="btn btn-secondary" onclick="moveItem(1, -1)">↑ Naik</button>
@@ -659,16 +660,15 @@ Tampilkan struktur tiap pipeline (tabel singkat) dan kodenya. Belum ada CV atau 
                 </button>
               </div>
             </div>
-            <div class="card-body">LANGKAH 11 — CROSS VALIDATION
-Evaluasi semua pipeline dengan cross_validate pada data latih (X dan y sesuai pendekatan yang dipilih di Langkah 10), return_train_score=True.
-Metrik: accuracy, precision, recall, f1, roc_auc. ROC-AUC dihitung dari probabilitas atau decision score, bukan prediksi kelas. Konfigurasi sama untuk semua model.
-Simpan hasilnya (termasuk skor train dan validation) agar bisa dipakai di Langkah 12 tanpa CV ulang.
+            <div class="card-body">LANGKAH 11 — CROSS VALIDATION DAN DIAGNOSIS
+
+Evaluasi semua pipeline dengan cross_validate pada data latih (X dan y sesuai pendekatan yang dipilih di Langkah 10), return_train_score=True. Metrik: accuracy, precision, recall, f1, roc_auc. ROC-AUC dihitung dari probabilitas atau decision score, bukan prediksi kelas. Konfigurasi sama untuk semua model.
 
 Tampilkan:
-- Tabel rata-rata dan standar deviasi tiap metrik.
-- Grafik perbandingan antar model.
+- Tabel rata-rata dan standar deviasi tiap metrik (skor train dan validation), serta grafik perbandingan antar model.
+- Selisih skor F1 train dan validation per model, beserta diagnosis singkat tiap model: overfitting, underfitting, atau generalisasi baik. Jangan memakai satu batas selisih yang kaku, pertimbangkan juga level skor dan standar deviasi.
 - Kelebihan dan kekurangan tiap model secara singkat.
-- Model paling menjanjikan. F1 adalah metrik utama sementara, tetapi perhatikan Recall karena konteksnya deteksi risiko CKD.
+- Satu model yang paling layak dituning berdasarkan F1 (metrik utama), Recall (penting karena konteksnya deteksi risiko CKD), dan selisih train–validation.
 
 Jika ada model dengan skor validasi mendekati sempurna (misalnya F1 atau ROC-AUC ≥ 0,99), jangan langsung anggap itu keberhasilan. Periksa kemungkinan target leakage: fitur yang nilainya hampir menentukan CKD_Status secara langsung (misalnya parameter laboratorium yang menjadi dasar diagnosis). Tampilkan fitur yang paling dominan dan jelaskan apakah skor tersebut wajar. Jangan mengubah fitur atau data, cukup laporkan dan tunggu keputusan saya.
 
@@ -703,12 +703,16 @@ Belum ada tuning.</div>
                 </button>
               </div>
             </div>
-            <div class="card-body">LANGKAH 12 — DIAGNOSIS OVERFITTING/UNDERFITTING
-Gunakan hasil cross_validate Langkah 11 (jangan jalankan CV ulang). Fokus pada F1.
+            <div class="card-body">LANGKAH 12 — TUNING DAN MODEL FINAL
 
-Tampilkan: tabel skor train, validation, dan selisihnya per model, serta grafik perbandingannya.
-Beri diagnosis tiap model (overfitting, underfitting, atau generalisasi baik) dengan alasan sederhana. Jangan memakai satu batas selisih yang kaku. Pertimbangkan juga level skor dan standar deviasi.
-Tentukan model yang paling layak dituning berdasarkan F1, Recall, dan selisih train–validation.</div>
+Tuning model terpilih dari Langkah 11 sebagai pipeline lengkap (gunakan prefix nama step pada param_grid).
+- GridSearchCV pada data latih dengan CV yang sama.
+- Grid kecil dan wajar untuk Colab. Sertakan parameter preprocessing hanya jika relevan.
+- scoring multi-metrik (accuracy, precision, recall, f1, roc_auc), refit='f1', return_train_score=True.
+
+Tampilkan: algoritma yang dituning, parameter yang diuji, parameter terbaik, best CV score, ringkasan cv_results_ (beberapa kombinasi teratas), serta perbandingan skor CV sebelum tuning (dari Langkah 11) dan sesudah tuning, dalam tabel dan grafik. Jangan menjalankan CV ulang untuk model sebelum tuning. Catat bahwa skor setelah tuning cenderung sedikit optimistis karena dipilih dari fold yang sama.
+
+Analisis apakah tuning benar-benar membantu, lalu tentukan model final (sebelum atau sesudah tuning, utamakan F1 dan Recall) dan simpan sebagai best_model. Pastikan best_model sudah di-fit pada seluruh data latih. Jika model final adalah versi sebelum tuning (belum di-fit), lakukan fit pada seluruh data latih terlebih dahulu. Jangan menggunakan data uji.</div>
           </div>
           <div class="item-edit-toolbar">
             <button class="btn btn-secondary" onclick="moveItem(3, -1)">↑ Naik</button>
@@ -739,16 +743,14 @@ Tentukan model yang paling layak dituning berdasarkan F1, Recall, dan selisih tr
                 </button>
               </div>
             </div>
-            <div class="card-body">LANGKAH 13 — GRIDSEARCHCV
-Tuning 1–3 model kandidat teratas dari Langkah 12 (jika selisih skor antar model kecil, tuning lebih dari satu model; jika satu model jelas unggul, cukup satu). Setiap kandidat dituning sebagai pipeline lengkap (gunakan prefix nama step pada param_grid).
-- GridSearchCV pada data latih dengan CV yang sama.
-- Grid wajar untuk Colab. Sertakan parameter preprocessing hanya jika relevan.
-- scoring multi-metrik (accuracy, precision, recall, f1, roc_auc), refit='f1', return_train_score=True.
-- Simpan best_model = pipeline terbaik hasil refit.
+            <div class="card-body">LANGKAH 13 — MENENTUKAN THRESHOLD (hanya dari data latih)
 
-Tampilkan: algoritma terpilih, parameter yang diuji, parameter terbaik, best CV score, ringkasan cv_results_ (top kombinasi), dan perbandingan skor CV sebelum dan sesudah tuning.
-
-Jika ada lebih dari satu kandidat, tampilkan perbandingan best CV score antar kandidat. Simpan hasil tiap kandidat, tetapi penentuan model final dilakukan di Langkah 14.</div>
+Threshold adalah batas skor untuk menyatakan "Terindikasi CKD". Jangan memakai data uji di langkah ini.
+1. Gunakan cross_val_predict (CV yang sama) dengan best_model untuk memperoleh skor out-of-fold kelas 1: predict_proba jika ada, jika tidak decision_function. Jangan menyamakan decision score dengan probabilitas.
+2. Hitung Precision, Recall, dan F1 pada rentang threshold. Tampilkan tabel ringkas dan grafik Precision-Recall terhadap threshold.
+3. Bandingkan kandidat: threshold default (0,5 untuk probabilitas atau 0 untuk decision score) dan threshold dengan F1 tertinggi. Jika alasannya jelas, boleh mengusulkan satu kandidat lain yang lebih mengutamakan Recall.
+4. Rekomendasikan satu threshold beserta alasan yang mudah dipahami, dengan mempertimbangkan bahwa konteksnya deteksi risiko CKD (False Negative lebih berbahaya daripada False Positive). Tunggu persetujuan saya sebelum menetapkannya.
+5. Setelah saya setuju, simpan threshold dan jenis skor yang dipakai, lalu berhenti. Threshold tidak boleh diubah setelah hasil data uji ditampilkan di Langkah 14.</div>
           </div>
           <div class="item-edit-toolbar">
             <button class="btn btn-secondary" onclick="moveItem(4, -1)">↑ Naik</button>
@@ -779,14 +781,17 @@ Jika ada lebih dari satu kandidat, tampilkan perbandingan best CV score antar ka
                 </button>
               </div>
             </div>
-            <div class="card-body">LANGKAH 14 — KEPUTUSAN MODEL FINAL
-Bandingkan model sebelum dan sesudah tuning memakai hasil Langkah 11 dan cv_results_ Langkah 13 (fold dan metrik yang sama). Jangan menjalankan CV ulang.
-Catat bahwa skor setelah tuning cenderung optimistis karena dipilih dari fold yang sama. Jika ingin lebih adil, lakukan nested CV ringan.
+            <div class="card-body">LANGKAH 14 — EVALUASI DATA UJI (satu kali)
 
-Tampilkan: tabel dan grafik per metrik, perubahan nilainya, dan analisis apakah tuning membantu.
-Tentukan model final (utamakan F1 dan Recall) dan simpan sebagai best_model.
+Gunakan best_model dan threshold yang sudah saya setujui di Langkah 13, tanpa mengubah keduanya. Jika pipeline dibangun ulang dari data mentah, gunakan data uji mentah yang sesuai, bukan X_test hasil transformasi lama.
 
-Pastikan best_model sudah di-fit pada seluruh data latih. Jika model final adalah versi sebelum tuning (belum di-fit), lakukan fit pada seluruh data latih terlebih dahulu. Jangan menggunakan data uji.</div>
+Tampilkan:
+- Accuracy, Precision, Recall, dan F1 dari prediksi berdasarkan threshold, serta ROC-AUC dari skor.
+- Confusion Matrix (TP, TN, FP, FN diberi label jelas), Classification Report, dan ROC Curve.
+- Interpretasi sederhana: kemampuan mendeteksi CKD, jumlah FP dan FN beserta artinya, risiko kesalahan, dan apakah hasilnya layak untuk demo.
+- Bandingkan secara singkat dengan skor CV. Jika selisihnya besar, jelaskan kemungkinan penyebabnya.
+
+Catat bahwa hasil adalah estimasi risiko berdasarkan dataset, bukan diagnosis medis. Setelah ini jangan mengubah model atau threshold berdasarkan hasil data uji.</div>
           </div>
           <div class="item-edit-toolbar">
             <button class="btn btn-secondary" onclick="moveItem(5, -1)">↑ Naik</button>
@@ -817,22 +822,37 @@ Pastikan best_model sudah di-fit pada seluruh data latih. Jika model final adala
                 </button>
               </div>
             </div>
-            <div class="card-body">LANGKAH 15 — EVALUASI AKHIR
+            <div class="card-body">LANGKAH 15 — APLIKASI STREAMLIT
 
-A. Threshold (hanya dari data training)
-1. Gunakan cross_val_predict (CV yang sama) dengan best_model untuk memperoleh skor out-of-fold kelas 1: predict_proba jika ada, jika tidak decision_function. Jangan menyamakan decision score dengan probabilitas.
-2. Hitung Precision, Recall, F1, dan F2 pada rentang threshold. Tampilkan tabel ringkas dan grafik Precision-Recall terhadap threshold.
-3. Bandingkan kandidat: threshold default (0,5 untuk probabilitas atau 0 untuk decision score), threshold dengan F1 tertinggi, dan threshold dengan F2 tertinggi (F2 lebih menekankan Recall).
-4. Rekomendasikan satu threshold beserta alasannya, dengan mempertimbangkan bahwa konteksnya deteksi risiko CKD (False Negative lebih berbahaya daripada False Positive). Tunggu persetujuan saya sebelum menetapkannya.
-5. Simpan threshold dan jenis skor yang dipakai.
-Setelah threshold saya setujui, lanjutkan ke bagian B. Threshold tidak boleh diubah setelah hasil data uji ditampilkan.
+Gunakan best_model, threshold, dan jenis skor dari Langkah 13. Jangan melatih ulang model dan jangan memakai data uji.
 
-B. Evaluasi data uji (satu kali, tanpa mengubah model atau threshold)
-Jika pipeline dibangun ulang dari data mentah, gunakan data uji mentah yang sesuai, bukan X_test hasil transformasi lama.
-- Accuracy, Precision, Recall, dan F1 dari prediksi berdasarkan threshold. ROC-AUC dari skor.
-- Visualisasi: Confusion Matrix (TP, TN, FP, FN jelas), Classification Report, dan ROC Curve.
-- Interpretasi sederhana: kemampuan mendeteksi CKD, jumlah FP dan FN, risiko kesalahan, dan kelayakan untuk demo.
-Catat bahwa hasil adalah estimasi risiko berdasarkan dataset, bukan diagnosis medis.</div>
+Periksa dulu: model final, threshold, jenis skor, selected_features, tipe dan urutan fitur, serta apakah ada transformasi dari Langkah 5–8 (imputasi, encoding, scaling, batas outlier, fitur turunan) yang berada di luar pipeline. Jika ada, sertakan transformasi itu di dalam artefak yang disimpan agar input mentah dari form bisa diproses sama seperti saat pelatihan. Jika pipeline memakai fungsi atau kelas buatan sendiri, simpan kodenya di file terpisah (misalnya preprocessing.py) dan impor di app.py, karena joblib tidak menyimpan kode kelas kustom.
+
+A. Simpan ke OUTPUT_DIR (mount Drive dan buat folder jika belum ada):
+1. Pipeline lengkap dengan joblib sebagai model.joblib.
+2. metadata.json berisi threshold, jenis skor (probabilitas atau decision score), selected_features, kelas positif dan pemetaan label, serta tipe dan rentang input yang dihitung dari data latih mentah saja (bukan dari data uji, dan bukan dari data yang sudah diskalakan).
+
+B. Buat dan simpan ke OUTPUT_DIR: app.py, requirements.txt (versi library sesuai lingkungan saat model disimpan, termasuk streamlit, scikit-learn, pandas, numpy, joblib), dan file pendukung lain jika ada. app.py harus membaca model.joblib dan metadata.json dari folder yang sama dengan app.py (gunakan pathlib dan Path(__file__).parent), bukan dari path Colab atau Drive.
+
+C. Fitur aplikasi (bahasa Indonesia, modern, sederhana, profesional, responsif, mudah dipakai pengguna umum):
+1. Judul: "Sistem Prediksi Risiko Penyakit Ginjal Kronis (CKD)".
+2. Form input dengan nama, tipe, dan urutan sesuai selected_features. Beri petunjuk singkat di tiap kolom (satuan atau contoh) hanya jika diketahui dari dataset.
+3. Tombol Prediksi.
+4. Hasil "Terindikasi CKD" atau "Tidak terindikasi CKD", ditampilkan jelas.
+5. Probabilitas hanya jika model memakai predict_proba. Decision score tidak boleh ditampilkan sebagai probabilitas.
+6. Threshold dan jenis skor harus sama seperti di Langkah 13.
+7. Penjelasan singkat mengenai hasil prediksi.
+8. Disclaimer: aplikasi hanya untuk edukasi dan penelitian, bukan alat diagnosis medis.
+
+D. Ketentuan teknis:
+1. Preprocessing berjalan lewat pipeline yang tersimpan.
+2. Tangani input kosong, tidak valid, atau di luar rentang dengan pesan yang jelas.
+3. Jangan mengarang rentang medis. Gunakan rentang dari data latih dan jelaskan jika perlu.
+4. Semua file bisa dipakai bersama tanpa melatih model ulang.
+
+E. Setelah semua tersimpan, tampilkan daftar file di OUTPUT_DIR beserta ukurannya, lalu verifikasi bahwa model.joblib bisa dimuat ulang dan memberi prediksi pada satu contoh data latih.
+
+Berikan: kode penyimpanan model dan metadata, kode app.py, requirements.txt, dan petunjuk menjalankan lokal (streamlit run app.py). Belum perlu deploy ke internet.</div>
           </div>
           <div class="item-edit-toolbar">
             <button class="btn btn-secondary" onclick="moveItem(6, -1)">↑ Naik</button>
@@ -863,15 +883,29 @@ Catat bahwa hasil adalah estimasi risiko berdasarkan dataset, bukan diagnosis me
                 </button>
               </div>
             </div>
-            <div class="card-body">LANGKAH 16 — INTERPRETASI FITUR
-Gunakan Permutation Importance pada best_model, selected_features, dan data latih.
-- Hitung pada data validasi per fold: latih klon pipeline pada fold training, permutasi pada fold validasi, n_repeats=10. Skor: F1 (jelaskan jika memakai Recall). best_model tidak diubah.
-- Sesuaikan dengan struktur pipeline agar nama fitur tetap sesuai.
+            <div class="card-body">LANGKAH 16 — DEPLOY KE WEBSITE (Streamlit Community Cloud)
 
-Tampilkan: ranking dan nilai importance (mean ± std), visualisasinya, dan penjelasan fitur paling berpengaruh.
-SHAP boleh sebagai tambahan hanya jika sesuai model dan tidak terlalu berat di Colab.
-Jelaskan bahwa importance menunjukkan kontribusi pada prediksi model, bukan hubungan sebab-akibat medis.
-Catat nama dan urutan fitur untuk deployment.</div>
+Tujuan: menampilkan aplikasi dari Langkah 15 sebagai website publik dengan link yang bisa dibuka siapa saja. Jangan melatih ulang model dan jangan mengubah isi model.joblib.
+
+A. Periksa file di OUTPUT_DIR:
+1. Pastikan ada app.py, model.joblib, metadata.json, requirements.txt, dan file pendukung lain jika ada.
+2. Tampilkan ukuran tiap file. Jika ada file di atas 25 MB (batas unggah lewat browser GitHub), jelaskan solusinya.
+3. Periksa requirements.txt: versi scikit-learn harus sama dengan yang dipakai saat model disimpan, dan streamlit sudah tercantum. Jelaskan singkat bahwa versi yang berbeda adalah penyebab umum aplikasi gagal membuka model.
+4. Pastikan app.py tidak memuat path Drive atau Colab dan tidak memuat data pasien asli.
+
+B. Berikan panduan langkah demi langkah untuk pemula, dalam urutan:
+1. Membuat akun GitHub dan repository publik baru.
+2. Mengunggah semua file (tanpa folder tambahan) ke repository lewat browser.
+3. Membuat akun Streamlit Community Cloud dan menghubungkannya ke GitHub.
+4. Membuat aplikasi baru: pilih repository, branch, dan file utama app.py, lalu klik Deploy.
+5. Menunggu proses build, lalu membuka link aplikasi.
+Tulis juga cara memperbarui aplikasi jika file diganti, dan catatan bahwa aplikasi gratis bisa "tertidur" jika lama tidak dibuka.
+
+C. Berikan daftar periksa setelah deploy: form tampil, tombol Prediksi berfungsi, hasil dan disclaimer muncul, dan prediksi untuk satu contoh data latih sama dengan hasil di Colab.
+
+D. Berikan daftar masalah umum beserta solusi singkat: ModuleNotFoundError, versi scikit-learn tidak cocok, file tidak ditemukan, dan aplikasi lambat atau tertidur.
+
+Jelaskan bahwa antarmuka GitHub dan Streamlit bisa berubah, sehingga nama tombol bisa sedikit berbeda dari panduan.</div>
           </div>
           <div class="item-edit-toolbar">
             <button class="btn btn-secondary" onclick="moveItem(7, -1)">↑ Naik</button>
@@ -1032,7 +1066,7 @@ Berikan: kode ekspor ONNX, kode verifikasi kesamaan prediksi, file index.html le
         <button class="icon-btn" onclick="closeModal()">✕</button>
       </div>
       <div class="modal-body">
-        <input type="hidden" id="editIndex" value="6">
+        <input type="hidden" id="editIndex" value="7">
 
         <div class="form-group">
           <label class="form-label">Label / Tag Badge (Opsional)</label>
@@ -1084,49 +1118,49 @@ Berikan: kode ekspor ONNX, kode verifikasi kesamaan prediksi, file index.html le
     "badge": "",
     "desc": "Prompt Awal",
     "cardLabel": "Copy",
-    "text": "Data Preparation langkah 0–9 sudah selesai di notebook ini. Kita lanjut ke pemodelan, evaluasi, interpretasi, dan deployment, dikerjakan bertahap per langkah.\n\nVariabel tersedia: selected_features, TARGET (CKD_Status), X_train, X_test, y_train, y_test. X_train dan X_test sudah berisi selected_features.\n\nAturan untuk semua langkah:\n1. Jangan mengulang Data Preparation 0–9, jangan membagi ulang data, dan jangan mengubah selected_features, TARGET, X_train, X_test, y_train, maupun y_test. Variabel baru diberi nama yang jelas.\n2. Data uji (X_test/y_test atau padanan mentahnya) hanya dipakai di Langkah 15B. Jangan dipakai untuk CV, pemilihan model, tuning, threshold, atau interpretasi.\n3. Kelas positif CKD adalah label 1 (pastikan y berkode 0/1).\n4. Gunakan StratifiedKFold(n_splits=5, shuffle=True, random_state=42) yang sama di semua langkah, dan random_state=42 pada model yang mendukungnya.\n5. Gunakan Pipeline. Preprocessing yang parameternya dipelajari dari data harus berada di dalam Pipeline dan tidak boleh dilakukan ganda dengan Langkah 5–8.\n6. Sebelum tiap langkah, periksa kode dan hasil sebelumnya. Jangan mengasumsikan variabel yang belum diperiksa keberadaannya.\n7. Kode rapi, ringkas, dan berjalan di Google Colab. Penjelasan singkat dalam bahasa Indonesia yang mudah dipahami.\n8. Kerjakan hanya langkah yang saya berikan, lalu berhenti dan tunggu instruksi berikutnya.\n9. Semua file hasil (model, metadata, aplikasi) disimpan ke Google Drive di folder \"Colab Notebooks/Hasil\". Gunakan variabel OUTPUT_DIR = \"/content/drive/MyDrive/Colab Notebooks/Hasil\", mount Drive dan buat folder jika belum ada. Jangan menyimpan ke tempat lain.\n\nKonfirmasi pemahaman saja, jangan membuat kode sampai saya meminta Langkah 10."
+    "text": "Data Preparation langkah 0–9 sudah selesai di notebook ini. Kita lanjut ke pemodelan, evaluasi, dan deployment, dikerjakan bertahap per langkah. Pengguna adalah pemula, jadi jelaskan dengan bahasa Indonesia yang sederhana dan singkat.\n\nVariabel tersedia: selected_features, TARGET (CKD_Status), X_train, X_test, y_train, y_test. X_train dan X_test sudah berisi selected_features.\n\nAturan untuk semua langkah:\n1. Jangan mengulang Data Preparation 0–9, jangan membagi ulang data, dan jangan mengubah selected_features, TARGET, X_train, X_test, y_train, maupun y_test. Variabel baru diberi nama yang jelas.\n2. Data uji (X_test/y_test atau padanan mentahnya) hanya dipakai di Langkah 14. Jangan dipakai untuk cross validation, pemilihan model, tuning, threshold, atau menentukan rentang input.\n3. Kelas positif CKD adalah label 1 (pastikan y berkode 0/1).\n4. Gunakan StratifiedKFold(n_splits=5, shuffle=True, random_state=42) yang sama di semua langkah, dan random_state=42 pada model yang mendukungnya.\n5. Gunakan Pipeline. Preprocessing yang parameternya dipelajari dari data harus berada di dalam Pipeline dan tidak boleh dilakukan ganda dengan Langkah 5–8.\n6. Sebelum tiap langkah, periksa kode dan hasil sebelumnya. Jangan mengasumsikan variabel yang belum diperiksa keberadaannya. Jika kode Langkah 0–9 tidak terlihat oleh Anda, minta saya menempelkannya, jangan menebak.\n7. Kode rapi, ringkas, dan berjalan di Google Colab. Setelah setiap hasil, berikan penjelasan singkat tentang arti hasil tersebut.\n8. Kerjakan hanya langkah yang saya berikan, lalu berhenti dan tunggu instruksi berikutnya.\n9. Semua file hasil (model, metadata, aplikasi) disimpan ke Google Drive di folder \"Colab Notebooks/Hasil\". Gunakan variabel OUTPUT_DIR = \"/content/drive/MyDrive/Colab Notebooks/Hasil\", mount Drive dan buat folder jika belum ada. Jangan menyimpan ke tempat lain.\n\nKonfirmasi pemahaman saja, jangan membuat kode sampai saya meminta Langkah 10."
   },
   {
     "badge": "",
     "desc": "",
     "cardLabel": "Langkah 10",
-    "text": "LANGKAH 10 — PIPELINE MODEL\n\nA. Periksa kode Langkah 0–9 di notebook ini dan laporkan:\n1. Transformasi yang dilakukan di Langkah 5, 6, dan 8 (imputasi, perbaikan format, outlier, encoding, scaling) beserta cara implementasinya (objek sklearn atau manual dengan pandas).\n2. Nama variabel data latih dan data uji hasil Langkah 3–4 yang belum melewati Langkah 5–8, jika masih ada. Jangan mengasumsikan namanya, periksa dulu.\n3. Apakah parameter transformasi dipelajari dari seluruh X_train sebelum CV (potensi leakage antar-fold), dan apakah seleksi fitur Langkah 4 hanya memakai data latih.\n\nB. Tentukan pendekatan:\n- Jika data sebelum Langkah 5–8 masih tersedia: bangun ulang transformasi Langkah 5–8 sebagai bagian Pipeline (ColumnTransformer, dan FunctionTransformer atau transformer kustom bila perlu) yang di-fit dalam tiap fold. Gunakan nama variabel baru dan jangan ubah X_train, X_test, maupun selected_features. Sebagai uji kesesuaian, bandingkan hasil transformasi pipeline pada data latih mentah dengan X_train yang sudah ada.\n- Jika tidak tersedia: gunakan X_train apa adanya, jelaskan keterbatasan metodologisnya, dan jangan klaim bebas leakage.\nTampilkan ringkasan pemeriksaan dan pendekatan yang dipilih, lalu minta persetujuan saya sebelum membuat pipeline.\n\nC. Buat pipeline: Logistic Regression, Decision Tree, Random Forest, SVM, KNN, Gradient Boosting.\n- Scaling hanya untuk LR, SVM, dan KNN.\n- Jangan membuat seleksi fitur baru dan jangan memakai X_test.\nTampilkan struktur tiap pipeline (tabel singkat) dan kodenya. Belum ada CV atau tuning."
+    "text": "LANGKAH 10 — PIPELINE MODEL\n\nA. Periksa kode Langkah 0–9 di notebook ini dan laporkan:\n1. Transformasi yang dilakukan di Langkah 5, 6, dan 8 (imputasi, perbaikan format, outlier, encoding, scaling) beserta cara implementasinya (objek sklearn atau manual dengan pandas).\n2. Nama variabel data latih dan data uji hasil Langkah 3–4 yang belum melewati Langkah 5–8, jika masih ada. Jangan mengasumsikan namanya, periksa dulu.\n3. Apakah parameter transformasi dipelajari dari seluruh X_train sebelum cross validation (potensi leakage antar-fold), dan apakah seleksi fitur Langkah 4 hanya memakai data latih.\n\nB. Tentukan pendekatan:\n- Jika data sebelum Langkah 5–8 masih tersedia: bangun ulang transformasi Langkah 5–8 sebagai bagian Pipeline (ColumnTransformer, dan FunctionTransformer atau transformer kustom bila perlu) yang di-fit dalam tiap fold. Gunakan nama variabel baru dan jangan ubah X_train, X_test, maupun selected_features. Sebagai uji kesesuaian, bandingkan hasil transformasi pipeline pada data latih mentah dengan X_train yang sudah ada.\n- Jika tidak tersedia: gunakan X_train apa adanya, jelaskan keterbatasan metodologisnya, dan jangan klaim bebas leakage.\nTampilkan ringkasan pemeriksaan dan pendekatan yang dipilih, lalu minta persetujuan saya sebelum membuat pipeline.\n\nC. Buat pipeline: Logistic Regression, Decision Tree, Random Forest, SVM, KNN, Gradient Boosting.\n- Scaling hanya untuk LR, SVM, dan KNN.\n- Periksa distribusi kelas y_train. Jika tidak seimbang, tampilkan dan jelaskan, serta tawarkan class_weight='balanced' di dalam pipeline untuk model yang mendukungnya. Jangan memakai oversampling di luar pipeline.\n- Jangan membuat seleksi fitur baru dan jangan memakai X_test.\nTampilkan struktur tiap pipeline (tabel singkat) dan kodenya. Belum ada cross validation atau tuning."
   },
   {
     "badge": "",
     "desc": "",
     "cardLabel": "Langkah 11",
-    "text": "LANGKAH 11 — CROSS VALIDATION\nEvaluasi semua pipeline dengan cross_validate pada data latih (X dan y sesuai pendekatan yang dipilih di Langkah 10), return_train_score=True.\nMetrik: accuracy, precision, recall, f1, roc_auc. ROC-AUC dihitung dari probabilitas atau decision score, bukan prediksi kelas. Konfigurasi sama untuk semua model.\nSimpan hasilnya (termasuk skor train dan validation) agar bisa dipakai di Langkah 12 tanpa CV ulang.\n\nTampilkan:\n- Tabel rata-rata dan standar deviasi tiap metrik.\n- Grafik perbandingan antar model.\n- Kelebihan dan kekurangan tiap model secara singkat.\n- Model paling menjanjikan. F1 adalah metrik utama sementara, tetapi perhatikan Recall karena konteksnya deteksi risiko CKD.\n\nJika ada model dengan skor validasi mendekati sempurna (misalnya F1 atau ROC-AUC ≥ 0,99), jangan langsung anggap itu keberhasilan. Periksa kemungkinan target leakage: fitur yang nilainya hampir menentukan CKD_Status secara langsung (misalnya parameter laboratorium yang menjadi dasar diagnosis). Tampilkan fitur yang paling dominan dan jelaskan apakah skor tersebut wajar. Jangan mengubah fitur atau data, cukup laporkan dan tunggu keputusan saya.\n\nBelum ada tuning."
+    "text": "LANGKAH 11 — CROSS VALIDATION DAN DIAGNOSIS\n\nEvaluasi semua pipeline dengan cross_validate pada data latih (X dan y sesuai pendekatan yang dipilih di Langkah 10), return_train_score=True. Metrik: accuracy, precision, recall, f1, roc_auc. ROC-AUC dihitung dari probabilitas atau decision score, bukan prediksi kelas. Konfigurasi sama untuk semua model.\n\nTampilkan:\n- Tabel rata-rata dan standar deviasi tiap metrik (skor train dan validation), serta grafik perbandingan antar model.\n- Selisih skor F1 train dan validation per model, beserta diagnosis singkat tiap model: overfitting, underfitting, atau generalisasi baik. Jangan memakai satu batas selisih yang kaku, pertimbangkan juga level skor dan standar deviasi.\n- Kelebihan dan kekurangan tiap model secara singkat.\n- Satu model yang paling layak dituning berdasarkan F1 (metrik utama), Recall (penting karena konteksnya deteksi risiko CKD), dan selisih train–validation.\n\nJika ada model dengan skor validasi mendekati sempurna (misalnya F1 atau ROC-AUC ≥ 0,99), jangan langsung anggap itu keberhasilan. Periksa kemungkinan target leakage: fitur yang nilainya hampir menentukan CKD_Status secara langsung (misalnya parameter laboratorium yang menjadi dasar diagnosis). Tampilkan fitur yang paling dominan dan jelaskan apakah skor tersebut wajar. Jangan mengubah fitur atau data, cukup laporkan dan tunggu keputusan saya.\n\nBelum ada tuning."
   },
   {
     "badge": "",
     "desc": "",
     "cardLabel": "Langkah 12",
-    "text": "LANGKAH 12 — DIAGNOSIS OVERFITTING/UNDERFITTING\nGunakan hasil cross_validate Langkah 11 (jangan jalankan CV ulang). Fokus pada F1.\n\nTampilkan: tabel skor train, validation, dan selisihnya per model, serta grafik perbandingannya.\nBeri diagnosis tiap model (overfitting, underfitting, atau generalisasi baik) dengan alasan sederhana. Jangan memakai satu batas selisih yang kaku. Pertimbangkan juga level skor dan standar deviasi.\nTentukan model yang paling layak dituning berdasarkan F1, Recall, dan selisih train–validation."
+    "text": "LANGKAH 12 — TUNING DAN MODEL FINAL\n\nTuning model terpilih dari Langkah 11 sebagai pipeline lengkap (gunakan prefix nama step pada param_grid).\n- GridSearchCV pada data latih dengan CV yang sama.\n- Grid kecil dan wajar untuk Colab. Sertakan parameter preprocessing hanya jika relevan.\n- scoring multi-metrik (accuracy, precision, recall, f1, roc_auc), refit='f1', return_train_score=True.\n\nTampilkan: algoritma yang dituning, parameter yang diuji, parameter terbaik, best CV score, ringkasan cv_results_ (beberapa kombinasi teratas), serta perbandingan skor CV sebelum tuning (dari Langkah 11) dan sesudah tuning, dalam tabel dan grafik. Jangan menjalankan CV ulang untuk model sebelum tuning. Catat bahwa skor setelah tuning cenderung sedikit optimistis karena dipilih dari fold yang sama.\n\nAnalisis apakah tuning benar-benar membantu, lalu tentukan model final (sebelum atau sesudah tuning, utamakan F1 dan Recall) dan simpan sebagai best_model. Pastikan best_model sudah di-fit pada seluruh data latih. Jika model final adalah versi sebelum tuning (belum di-fit), lakukan fit pada seluruh data latih terlebih dahulu. Jangan menggunakan data uji."
   },
   {
     "badge": "",
     "desc": "",
     "cardLabel": "Langkah 13",
-    "text": "LANGKAH 13 — GRIDSEARCHCV\nTuning 1–3 model kandidat teratas dari Langkah 12 (jika selisih skor antar model kecil, tuning lebih dari satu model; jika satu model jelas unggul, cukup satu). Setiap kandidat dituning sebagai pipeline lengkap (gunakan prefix nama step pada param_grid).\n- GridSearchCV pada data latih dengan CV yang sama.\n- Grid wajar untuk Colab. Sertakan parameter preprocessing hanya jika relevan.\n- scoring multi-metrik (accuracy, precision, recall, f1, roc_auc), refit='f1', return_train_score=True.\n- Simpan best_model = pipeline terbaik hasil refit.\n\nTampilkan: algoritma terpilih, parameter yang diuji, parameter terbaik, best CV score, ringkasan cv_results_ (top kombinasi), dan perbandingan skor CV sebelum dan sesudah tuning.\n\nJika ada lebih dari satu kandidat, tampilkan perbandingan best CV score antar kandidat. Simpan hasil tiap kandidat, tetapi penentuan model final dilakukan di Langkah 14."
+    "text": "LANGKAH 13 — MENENTUKAN THRESHOLD (hanya dari data latih)\n\nThreshold adalah batas skor untuk menyatakan \"Terindikasi CKD\". Jangan memakai data uji di langkah ini.\n1. Gunakan cross_val_predict (CV yang sama) dengan best_model untuk memperoleh skor out-of-fold kelas 1: predict_proba jika ada, jika tidak decision_function. Jangan menyamakan decision score dengan probabilitas.\n2. Hitung Precision, Recall, dan F1 pada rentang threshold. Tampilkan tabel ringkas dan grafik Precision-Recall terhadap threshold.\n3. Bandingkan kandidat: threshold default (0,5 untuk probabilitas atau 0 untuk decision score) dan threshold dengan F1 tertinggi. Jika alasannya jelas, boleh mengusulkan satu kandidat lain yang lebih mengutamakan Recall.\n4. Rekomendasikan satu threshold beserta alasan yang mudah dipahami, dengan mempertimbangkan bahwa konteksnya deteksi risiko CKD (False Negative lebih berbahaya daripada False Positive). Tunggu persetujuan saya sebelum menetapkannya.\n5. Setelah saya setuju, simpan threshold dan jenis skor yang dipakai, lalu berhenti. Threshold tidak boleh diubah setelah hasil data uji ditampilkan di Langkah 14."
   },
   {
     "badge": "",
     "desc": "",
     "cardLabel": "Langkah 14",
-    "text": "LANGKAH 14 — KEPUTUSAN MODEL FINAL\nBandingkan model sebelum dan sesudah tuning memakai hasil Langkah 11 dan cv_results_ Langkah 13 (fold dan metrik yang sama). Jangan menjalankan CV ulang.\nCatat bahwa skor setelah tuning cenderung optimistis karena dipilih dari fold yang sama. Jika ingin lebih adil, lakukan nested CV ringan.\n\nTampilkan: tabel dan grafik per metrik, perubahan nilainya, dan analisis apakah tuning membantu.\nTentukan model final (utamakan F1 dan Recall) dan simpan sebagai best_model.\n\nPastikan best_model sudah di-fit pada seluruh data latih. Jika model final adalah versi sebelum tuning (belum di-fit), lakukan fit pada seluruh data latih terlebih dahulu. Jangan menggunakan data uji."
+    "text": "LANGKAH 14 — EVALUASI DATA UJI (satu kali)\n\nGunakan best_model dan threshold yang sudah saya setujui di Langkah 13, tanpa mengubah keduanya. Jika pipeline dibangun ulang dari data mentah, gunakan data uji mentah yang sesuai, bukan X_test hasil transformasi lama.\n\nTampilkan:\n- Accuracy, Precision, Recall, dan F1 dari prediksi berdasarkan threshold, serta ROC-AUC dari skor.\n- Confusion Matrix (TP, TN, FP, FN diberi label jelas), Classification Report, dan ROC Curve.\n- Interpretasi sederhana: kemampuan mendeteksi CKD, jumlah FP dan FN beserta artinya, risiko kesalahan, dan apakah hasilnya layak untuk demo.\n- Bandingkan secara singkat dengan skor CV. Jika selisihnya besar, jelaskan kemungkinan penyebabnya.\n\nCatat bahwa hasil adalah estimasi risiko berdasarkan dataset, bukan diagnosis medis. Setelah ini jangan mengubah model atau threshold berdasarkan hasil data uji."
   },
   {
     "badge": "",
     "desc": "",
     "cardLabel": "Langkah 15",
-    "text": "LANGKAH 15 — EVALUASI AKHIR\n\nA. Threshold (hanya dari data training)\n1. Gunakan cross_val_predict (CV yang sama) dengan best_model untuk memperoleh skor out-of-fold kelas 1: predict_proba jika ada, jika tidak decision_function. Jangan menyamakan decision score dengan probabilitas.\n2. Hitung Precision, Recall, F1, dan F2 pada rentang threshold. Tampilkan tabel ringkas dan grafik Precision-Recall terhadap threshold.\n3. Bandingkan kandidat: threshold default (0,5 untuk probabilitas atau 0 untuk decision score), threshold dengan F1 tertinggi, dan threshold dengan F2 tertinggi (F2 lebih menekankan Recall).\n4. Rekomendasikan satu threshold beserta alasannya, dengan mempertimbangkan bahwa konteksnya deteksi risiko CKD (False Negative lebih berbahaya daripada False Positive). Tunggu persetujuan saya sebelum menetapkannya.\n5. Simpan threshold dan jenis skor yang dipakai.\nSetelah threshold saya setujui, lanjutkan ke bagian B. Threshold tidak boleh diubah setelah hasil data uji ditampilkan.\n\nB. Evaluasi data uji (satu kali, tanpa mengubah model atau threshold)\nJika pipeline dibangun ulang dari data mentah, gunakan data uji mentah yang sesuai, bukan X_test hasil transformasi lama.\n- Accuracy, Precision, Recall, dan F1 dari prediksi berdasarkan threshold. ROC-AUC dari skor.\n- Visualisasi: Confusion Matrix (TP, TN, FP, FN jelas), Classification Report, dan ROC Curve.\n- Interpretasi sederhana: kemampuan mendeteksi CKD, jumlah FP dan FN, risiko kesalahan, dan kelayakan untuk demo.\nCatat bahwa hasil adalah estimasi risiko berdasarkan dataset, bukan diagnosis medis."
+    "text": "LANGKAH 15 — APLIKASI STREAMLIT\n\nGunakan best_model, threshold, dan jenis skor dari Langkah 13. Jangan melatih ulang model dan jangan memakai data uji.\n\nPeriksa dulu: model final, threshold, jenis skor, selected_features, tipe dan urutan fitur, serta apakah ada transformasi dari Langkah 5–8 (imputasi, encoding, scaling, batas outlier, fitur turunan) yang berada di luar pipeline. Jika ada, sertakan transformasi itu di dalam artefak yang disimpan agar input mentah dari form bisa diproses sama seperti saat pelatihan. Jika pipeline memakai fungsi atau kelas buatan sendiri, simpan kodenya di file terpisah (misalnya preprocessing.py) dan impor di app.py, karena joblib tidak menyimpan kode kelas kustom.\n\nA. Simpan ke OUTPUT_DIR (mount Drive dan buat folder jika belum ada):\n1. Pipeline lengkap dengan joblib sebagai model.joblib.\n2. metadata.json berisi threshold, jenis skor (probabilitas atau decision score), selected_features, kelas positif dan pemetaan label, serta tipe dan rentang input yang dihitung dari data latih mentah saja (bukan dari data uji, dan bukan dari data yang sudah diskalakan).\n\nB. Buat dan simpan ke OUTPUT_DIR: app.py, requirements.txt (versi library sesuai lingkungan saat model disimpan, termasuk streamlit, scikit-learn, pandas, numpy, joblib), dan file pendukung lain jika ada. app.py harus membaca model.joblib dan metadata.json dari folder yang sama dengan app.py (gunakan pathlib dan Path(__file__).parent), bukan dari path Colab atau Drive.\n\nC. Fitur aplikasi (bahasa Indonesia, modern, sederhana, profesional, responsif, mudah dipakai pengguna umum):\n1. Judul: \"Sistem Prediksi Risiko Penyakit Ginjal Kronis (CKD)\".\n2. Form input dengan nama, tipe, dan urutan sesuai selected_features. Beri petunjuk singkat di tiap kolom (satuan atau contoh) hanya jika diketahui dari dataset.\n3. Tombol Prediksi.\n4. Hasil \"Terindikasi CKD\" atau \"Tidak terindikasi CKD\", ditampilkan jelas.\n5. Probabilitas hanya jika model memakai predict_proba. Decision score tidak boleh ditampilkan sebagai probabilitas.\n6. Threshold dan jenis skor harus sama seperti di Langkah 13.\n7. Penjelasan singkat mengenai hasil prediksi.\n8. Disclaimer: aplikasi hanya untuk edukasi dan penelitian, bukan alat diagnosis medis.\n\nD. Ketentuan teknis:\n1. Preprocessing berjalan lewat pipeline yang tersimpan.\n2. Tangani input kosong, tidak valid, atau di luar rentang dengan pesan yang jelas.\n3. Jangan mengarang rentang medis. Gunakan rentang dari data latih dan jelaskan jika perlu.\n4. Semua file bisa dipakai bersama tanpa melatih model ulang.\n\nE. Setelah semua tersimpan, tampilkan daftar file di OUTPUT_DIR beserta ukurannya, lalu verifikasi bahwa model.joblib bisa dimuat ulang dan memberi prediksi pada satu contoh data latih.\n\nBerikan: kode penyimpanan model dan metadata, kode app.py, requirements.txt, dan petunjuk menjalankan lokal (streamlit run app.py). Belum perlu deploy ke internet."
   },
   {
     "badge": "",
     "desc": "",
     "cardLabel": "Langkah 16",
-    "text": "LANGKAH 16 — INTERPRETASI FITUR\nGunakan Permutation Importance pada best_model, selected_features, dan data latih.\n- Hitung pada data validasi per fold: latih klon pipeline pada fold training, permutasi pada fold validasi, n_repeats=10. Skor: F1 (jelaskan jika memakai Recall). best_model tidak diubah.\n- Sesuaikan dengan struktur pipeline agar nama fitur tetap sesuai.\n\nTampilkan: ranking dan nilai importance (mean ± std), visualisasinya, dan penjelasan fitur paling berpengaruh.\nSHAP boleh sebagai tambahan hanya jika sesuai model dan tidak terlalu berat di Colab.\nJelaskan bahwa importance menunjukkan kontribusi pada prediksi model, bukan hubungan sebab-akibat medis.\nCatat nama dan urutan fitur untuk deployment."
+    "text": "LANGKAH 16 — DEPLOY KE WEBSITE (Streamlit Community Cloud)\n\nTujuan: menampilkan aplikasi dari Langkah 15 sebagai website publik dengan link yang bisa dibuka siapa saja. Jangan melatih ulang model dan jangan mengubah isi model.joblib.\n\nA. Periksa file di OUTPUT_DIR:\n1. Pastikan ada app.py, model.joblib, metadata.json, requirements.txt, dan file pendukung lain jika ada.\n2. Tampilkan ukuran tiap file. Jika ada file di atas 25 MB (batas unggah lewat browser GitHub), jelaskan solusinya.\n3. Periksa requirements.txt: versi scikit-learn harus sama dengan yang dipakai saat model disimpan, dan streamlit sudah tercantum. Jelaskan singkat bahwa versi yang berbeda adalah penyebab umum aplikasi gagal membuka model.\n4. Pastikan app.py tidak memuat path Drive atau Colab dan tidak memuat data pasien asli.\n\nB. Berikan panduan langkah demi langkah untuk pemula, dalam urutan:\n1. Membuat akun GitHub dan repository publik baru.\n2. Mengunggah semua file (tanpa folder tambahan) ke repository lewat browser.\n3. Membuat akun Streamlit Community Cloud dan menghubungkannya ke GitHub.\n4. Membuat aplikasi baru: pilih repository, branch, dan file utama app.py, lalu klik Deploy.\n5. Menunggu proses build, lalu membuka link aplikasi.\nTulis juga cara memperbarui aplikasi jika file diganti, dan catatan bahwa aplikasi gratis bisa \"tertidur\" jika lama tidak dibuka.\n\nC. Berikan daftar periksa setelah deploy: form tampil, tombol Prediksi berfungsi, hasil dan disclaimer muncul, dan prediksi untuk satu contoh data latih sama dengan hasil di Colab.\n\nD. Berikan daftar masalah umum beserta solusi singkat: ModuleNotFoundError, versi scikit-learn tidak cocok, file tidak ditemukan, dan aplikasi lambat atau tertidur.\n\nJelaskan bahwa antarmuka GitHub dan Streamlit bisa berubah, sehingga nama tombol bisa sedikit berbeda dari panduan."
   },
   {
     "badge": "",
