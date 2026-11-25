@@ -479,7 +479,7 @@
     }
   </style>
 </head>
-<body >
+<body class="">
 
   <!-- Header -->
   <header>
@@ -495,12 +495,12 @@
       </div>
 
       <div class="nav-actions">
-        <button class="btn btn-primary" id="toggleEditBtn" onclick="toggleEditMode()">
+        <button class="btn btn-secondary" id="toggleEditBtn" onclick="toggleEditMode()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 20h9"></path>
             <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
           </svg>
-          <span id="editBtnText">Selesai Edit</span>
+          <span id="editBtnText">Mode Edit</span>
         </button>
 
         <button class="btn btn-primary" onclick="openAddModal()">
@@ -825,6 +825,7 @@ A. Threshold (hanya dari data training)
 3. Bandingkan kandidat: threshold default (0,5 untuk probabilitas atau 0 untuk decision score), threshold dengan F1 tertinggi, dan threshold dengan F2 tertinggi (F2 lebih menekankan Recall).
 4. Rekomendasikan satu threshold beserta alasannya, dengan mempertimbangkan bahwa konteksnya deteksi risiko CKD (False Negative lebih berbahaya daripada False Positive). Tunggu persetujuan saya sebelum menetapkannya.
 5. Simpan threshold dan jenis skor yang dipakai.
+Setelah threshold saya setujui, lanjutkan ke bagian B. Threshold tidak boleh diubah setelah hasil data uji ditampilkan.
 
 B. Evaluasi data uji (satu kali, tanpa mengubah model atau threshold)
 Jika pipeline dibangun ulang dari data mentah, gunakan data uji mentah yang sesuai, bukan X_test hasil transformasi lama.
@@ -1016,7 +1017,7 @@ Berikan: kode ekspor ONNX, kode verifikasi kesamaan prediksi, file index.html le
   </main>
 
   <!-- Toast Notification -->
-  <div id="toast" class="toast show">
+  <div id="toast" class="toast">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2">
       <polyline points="20 6 9 17 4 12"></polyline>
     </svg>
@@ -1031,7 +1032,7 @@ Berikan: kode ekspor ONNX, kode verifikasi kesamaan prediksi, file index.html le
         <button class="icon-btn" onclick="closeModal()">✕</button>
       </div>
       <div class="modal-body">
-        <input type="hidden" id="editIndex" value="9">
+        <input type="hidden" id="editIndex" value="6">
 
         <div class="form-group">
           <label class="form-label">Label / Tag Badge (Opsional)</label>
@@ -1119,7 +1120,7 @@ Berikan: kode ekspor ONNX, kode verifikasi kesamaan prediksi, file index.html le
     "badge": "",
     "desc": "",
     "cardLabel": "Langkah 15",
-    "text": "LANGKAH 15 — EVALUASI AKHIR\n\nA. Threshold (hanya dari data training)\n1. Gunakan cross_val_predict (CV yang sama) dengan best_model untuk memperoleh skor out-of-fold kelas 1: predict_proba jika ada, jika tidak decision_function. Jangan menyamakan decision score dengan probabilitas.\n2. Hitung Precision, Recall, F1, dan F2 pada rentang threshold. Tampilkan tabel ringkas dan grafik Precision-Recall terhadap threshold.\n3. Bandingkan kandidat: threshold default (0,5 untuk probabilitas atau 0 untuk decision score), threshold dengan F1 tertinggi, dan threshold dengan F2 tertinggi (F2 lebih menekankan Recall).\n4. Rekomendasikan satu threshold beserta alasannya, dengan mempertimbangkan bahwa konteksnya deteksi risiko CKD (False Negative lebih berbahaya daripada False Positive). Tunggu persetujuan saya sebelum menetapkannya.\n5. Simpan threshold dan jenis skor yang dipakai.\n\nB. Evaluasi data uji (satu kali, tanpa mengubah model atau threshold)\nJika pipeline dibangun ulang dari data mentah, gunakan data uji mentah yang sesuai, bukan X_test hasil transformasi lama.\n- Accuracy, Precision, Recall, dan F1 dari prediksi berdasarkan threshold. ROC-AUC dari skor.\n- Visualisasi: Confusion Matrix (TP, TN, FP, FN jelas), Classification Report, dan ROC Curve.\n- Interpretasi sederhana: kemampuan mendeteksi CKD, jumlah FP dan FN, risiko kesalahan, dan kelayakan untuk demo.\nCatat bahwa hasil adalah estimasi risiko berdasarkan dataset, bukan diagnosis medis."
+    "text": "LANGKAH 15 — EVALUASI AKHIR\n\nA. Threshold (hanya dari data training)\n1. Gunakan cross_val_predict (CV yang sama) dengan best_model untuk memperoleh skor out-of-fold kelas 1: predict_proba jika ada, jika tidak decision_function. Jangan menyamakan decision score dengan probabilitas.\n2. Hitung Precision, Recall, F1, dan F2 pada rentang threshold. Tampilkan tabel ringkas dan grafik Precision-Recall terhadap threshold.\n3. Bandingkan kandidat: threshold default (0,5 untuk probabilitas atau 0 untuk decision score), threshold dengan F1 tertinggi, dan threshold dengan F2 tertinggi (F2 lebih menekankan Recall).\n4. Rekomendasikan satu threshold beserta alasannya, dengan mempertimbangkan bahwa konteksnya deteksi risiko CKD (False Negative lebih berbahaya daripada False Positive). Tunggu persetujuan saya sebelum menetapkannya.\n5. Simpan threshold dan jenis skor yang dipakai.\nSetelah threshold saya setujui, lanjutkan ke bagian B. Threshold tidak boleh diubah setelah hasil data uji ditampilkan.\n\nB. Evaluasi data uji (satu kali, tanpa mengubah model atau threshold)\nJika pipeline dibangun ulang dari data mentah, gunakan data uji mentah yang sesuai, bukan X_test hasil transformasi lama.\n- Accuracy, Precision, Recall, dan F1 dari prediksi berdasarkan threshold. ROC-AUC dari skor.\n- Visualisasi: Confusion Matrix (TP, TN, FP, FN jelas), Classification Report, dan ROC Curve.\n- Interpretasi sederhana: kemampuan mendeteksi CKD, jumlah FP dan FN, risiko kesalahan, dan kelayakan untuk demo.\nCatat bahwa hasil adalah estimasi risiko berdasarkan dataset, bukan diagnosis medis."
   },
   {
     "badge": "",
@@ -1410,7 +1411,7 @@ Berikan: kode ekspor ONNX, kode verifikasi kesamaan prediksi, file index.html le
       htmlContent = htmlContent.replace(/const DEFAULT_ITEMS = \[[\s\S]*?\];/m, replacementScript);
 
       // Clean up dynamic edit class
-      htmlContent = htmlContent.replace('class="edit-mode"', '');
+      htmlContent = htmlContent.replace('', '');
 
       return "<!DOCTYPE html>\n<html lang=\"id\">\n" + htmlContent.substring(htmlContent.indexOf("<head>"));
     }
