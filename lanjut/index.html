@@ -580,7 +580,9 @@ Aturan untuk semua langkah:
 6. Sebelum tiap langkah, periksa kode dan hasil sebelumnya. Jangan mengasumsikan variabel yang belum diperiksa keberadaannya.
 7. Kode rapi, ringkas, dan berjalan di Google Colab. Penjelasan singkat dalam bahasa Indonesia yang mudah dipahami.
 8. Kerjakan hanya langkah yang saya berikan, lalu berhenti dan tunggu instruksi berikutnya.
-9. Semua file hasil (model, metadata, aplikasi) disimpan ke Google Drive di folder "Colab Notebooks/Hasil". Gunakan variabel OUTPUT_DIR = "/content/drive/MyDrive/Colab Notebooks/Hasil", mount Drive dan buat folder jika belum ada. Jangan menyimpan ke tempat lain.</div>
+9. Semua file hasil (model, metadata, aplikasi) disimpan ke Google Drive di folder "Colab Notebooks/Hasil". Gunakan variabel OUTPUT_DIR = "/content/drive/MyDrive/Colab Notebooks/Hasil", mount Drive dan buat folder jika belum ada. Jangan menyimpan ke tempat lain.
+
+Konfirmasi pemahaman saja, jangan membuat kode sampai saya meminta Langkah 10.</div>
           </div>
           <div class="item-edit-toolbar">
             <button class="btn btn-secondary" onclick="moveItem(0, -1)" disabled="">↑ Naik</button>
@@ -667,6 +669,9 @@ Tampilkan:
 - Grafik perbandingan antar model.
 - Kelebihan dan kekurangan tiap model secara singkat.
 - Model paling menjanjikan. F1 adalah metrik utama sementara, tetapi perhatikan Recall karena konteksnya deteksi risiko CKD.
+
+Jika ada model dengan skor validasi mendekati sempurna (misalnya F1 atau ROC-AUC ≥ 0,99), jangan langsung anggap itu keberhasilan. Periksa kemungkinan target leakage: fitur yang nilainya hampir menentukan CKD_Status secara langsung (misalnya parameter laboratorium yang menjadi dasar diagnosis). Tampilkan fitur yang paling dominan dan jelaskan apakah skor tersebut wajar. Jangan mengubah fitur atau data, cukup laporkan dan tunggu keputusan saya.
+
 Belum ada tuning.</div>
           </div>
           <div class="item-edit-toolbar">
@@ -735,13 +740,15 @@ Tentukan model yang paling layak dituning berdasarkan F1, Recall, dan selisih tr
               </div>
             </div>
             <div class="card-body">LANGKAH 13 — GRIDSEARCHCV
-Tuning model terpilih dari Langkah 12 pada seluruh pipeline (gunakan prefix nama step pada param_grid).
+Tuning 1–3 model kandidat teratas dari Langkah 12 (jika selisih skor antar model kecil, tuning lebih dari satu model; jika satu model jelas unggul, cukup satu). Setiap kandidat dituning sebagai pipeline lengkap (gunakan prefix nama step pada param_grid).
 - GridSearchCV pada data latih dengan CV yang sama.
 - Grid wajar untuk Colab. Sertakan parameter preprocessing hanya jika relevan.
-- scoring multi-metrik (accuracy, precision, recall, f1, roc_auc), refit='f1'.
+- scoring multi-metrik (accuracy, precision, recall, f1, roc_auc), refit='f1', return_train_score=True.
 - Simpan best_model = pipeline terbaik hasil refit.
 
-Tampilkan: algoritma terpilih, parameter yang diuji, parameter terbaik, best CV score, ringkasan cv_results_ (top kombinasi), dan perbandingan skor CV sebelum dan sesudah tuning.</div>
+Tampilkan: algoritma terpilih, parameter yang diuji, parameter terbaik, best CV score, ringkasan cv_results_ (top kombinasi), dan perbandingan skor CV sebelum dan sesudah tuning.
+
+Jika ada lebih dari satu kandidat, tampilkan perbandingan best CV score antar kandidat. Simpan hasil tiap kandidat, tetapi penentuan model final dilakukan di Langkah 14.</div>
           </div>
           <div class="item-edit-toolbar">
             <button class="btn btn-secondary" onclick="moveItem(4, -1)">↑ Naik</button>
@@ -777,7 +784,9 @@ Bandingkan model sebelum dan sesudah tuning memakai hasil Langkah 11 dan cv_resu
 Catat bahwa skor setelah tuning cenderung optimistis karena dipilih dari fold yang sama. Jika ingin lebih adil, lakukan nested CV ringan.
 
 Tampilkan: tabel dan grafik per metrik, perubahan nilainya, dan analisis apakah tuning membantu.
-Tentukan model final (utamakan F1 dan Recall) dan simpan sebagai best_model.</div>
+Tentukan model final (utamakan F1 dan Recall) dan simpan sebagai best_model.
+
+Pastikan best_model sudah di-fit pada seluruh data latih. Jika model final adalah versi sebelum tuning (belum di-fit), lakukan fit pada seluruh data latih terlebih dahulu. Jangan menggunakan data uji.</div>
           </div>
           <div class="item-edit-toolbar">
             <button class="btn btn-secondary" onclick="moveItem(5, -1)">↑ Naik</button>
@@ -899,7 +908,7 @@ Periksa dulu: model final, threshold, jenis skor, selected_features, tipe dan ur
 
 A. Simpan ke OUTPUT_DIR (Google Drive, mount dan buat folder jika belum ada):
 1. Pipeline lengkap dengan joblib sebagai model.joblib.
-2. metadata.json berisi threshold, jenis skor (probabilitas atau decision score), selected_features, kelas positif dan pemetaan label, serta tipe dan rentang input dari data mentah (bukan dari data yang sudah diskalakan).
+2. metadata.json berisi threshold, jenis skor (probabilitas atau decision score), selected_features, kelas positif dan pemetaan label, serta tipe dan rentang input dari data latih mentah saja (bukan dari data uji, dan bukan dari data yang sudah diskalakan).
 
 B. Buat dan simpan ke OUTPUT_DIR: app.py, model.joblib, metadata.json, requirements.txt (versi library sesuai lingkungan saat model disimpan).
 app.py harus membaca model.joblib dan metadata.json dari folder yang sama dengan app.py (gunakan pathlib dan Path(__file__).parent), bukan dari path Colab atau Drive, agar tetap berjalan setelah dipindahkan ke GitHub.
@@ -917,7 +926,7 @@ C. Fitur aplikasi (bahasa Indonesia, modern, sederhana, profesional, responsif, 
 D. Ketentuan teknis:
 1. Preprocessing berjalan lewat pipeline yang tersimpan.
 2. Tangani input kosong, tidak valid, atau di luar rentang dengan pesan yang jelas.
-3. Rentang input berdasarkan karakteristik dataset. Jangan mengarang rentang medis, dan jelaskan jika perlu.
+3. Rentang input dihitung dari data latih mentah saja (nilai minimum dan maksimum). Jangan mengarang rentang medis, dan jelaskan jika perlu.
 4. Semua file bisa dipakai bersama tanpa melatih model ulang.
 
 E. Setelah semua tersimpan, tampilkan daftar file di OUTPUT_DIR beserta ukurannya untuk konfirmasi.
@@ -972,7 +981,7 @@ D. Embed model.onnx sebagai base64 di dalam index.html agar bisa dibuka langsung
 
 E. Jika preprocessing (encoding, scaling, imputasi) tidak ikut masuk ONNX, tulis ulang di JavaScript dengan parameter yang persis sama dari pipeline, lalu verifikasi hasilnya sama.
 
-F. Validasi input: tangani nilai kosong atau tidak valid. Rentang input berdasarkan karakteristik dataset, jangan mengarang rentang medis.
+F. Validasi input: tangani nilai kosong atau tidak valid. Rentang input dihitung dari data latih mentah saja, jangan mengarang rentang medis.
 
 G. Tampilkan daftar file di OUTPUT_DIR beserta ukurannya setelah selesai.
 
@@ -1007,22 +1016,22 @@ Berikan: kode ekspor ONNX, kode verifikasi kesamaan prediksi, file index.html le
   </main>
 
   <!-- Toast Notification -->
-  <div id="toast" class="toast">
+  <div id="toast" class="toast show">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2">
       <polyline points="20 6 9 17 4 12"></polyline>
     </svg>
-    <span id="toastMsg">Bagian teks baru berhasil ditambahkan!</span>
+    <span id="toastMsg">Perubahan berhasil disimpan di layar!</span>
   </div>
 
   <!-- Add / Edit Modal -->
   <div id="itemModal" class="modal-overlay">
     <div class="modal">
       <div class="modal-header">
-        <h3 class="modal-title" id="modalTitle">Tambah Bagian Teks</h3>
+        <h3 class="modal-title" id="modalTitle">Edit Bagian Teks</h3>
         <button class="icon-btn" onclick="closeModal()">✕</button>
       </div>
       <div class="modal-body">
-        <input type="hidden" id="editIndex" value="">
+        <input type="hidden" id="editIndex" value="9">
 
         <div class="form-group">
           <label class="form-label">Label / Tag Badge (Opsional)</label>
@@ -1074,7 +1083,7 @@ Berikan: kode ekspor ONNX, kode verifikasi kesamaan prediksi, file index.html le
     "badge": "",
     "desc": "Prompt Awal",
     "cardLabel": "Copy",
-    "text": "Data Preparation langkah 0–9 sudah selesai di notebook ini. Kita lanjut ke pemodelan, evaluasi, interpretasi, dan deployment, dikerjakan bertahap per langkah.\n\nVariabel tersedia: selected_features, TARGET (CKD_Status), X_train, X_test, y_train, y_test. X_train dan X_test sudah berisi selected_features.\n\nAturan untuk semua langkah:\n1. Jangan mengulang Data Preparation 0–9, jangan membagi ulang data, dan jangan mengubah selected_features, TARGET, X_train, X_test, y_train, maupun y_test. Variabel baru diberi nama yang jelas.\n2. Data uji (X_test/y_test atau padanan mentahnya) hanya dipakai di Langkah 15B. Jangan dipakai untuk CV, pemilihan model, tuning, threshold, atau interpretasi.\n3. Kelas positif CKD adalah label 1 (pastikan y berkode 0/1).\n4. Gunakan StratifiedKFold(n_splits=5, shuffle=True, random_state=42) yang sama di semua langkah, dan random_state=42 pada model yang mendukungnya.\n5. Gunakan Pipeline. Preprocessing yang parameternya dipelajari dari data harus berada di dalam Pipeline dan tidak boleh dilakukan ganda dengan Langkah 5–8.\n6. Sebelum tiap langkah, periksa kode dan hasil sebelumnya. Jangan mengasumsikan variabel yang belum diperiksa keberadaannya.\n7. Kode rapi, ringkas, dan berjalan di Google Colab. Penjelasan singkat dalam bahasa Indonesia yang mudah dipahami.\n8. Kerjakan hanya langkah yang saya berikan, lalu berhenti dan tunggu instruksi berikutnya.\n9. Semua file hasil (model, metadata, aplikasi) disimpan ke Google Drive di folder \"Colab Notebooks/Hasil\". Gunakan variabel OUTPUT_DIR = \"/content/drive/MyDrive/Colab Notebooks/Hasil\", mount Drive dan buat folder jika belum ada. Jangan menyimpan ke tempat lain."
+    "text": "Data Preparation langkah 0–9 sudah selesai di notebook ini. Kita lanjut ke pemodelan, evaluasi, interpretasi, dan deployment, dikerjakan bertahap per langkah.\n\nVariabel tersedia: selected_features, TARGET (CKD_Status), X_train, X_test, y_train, y_test. X_train dan X_test sudah berisi selected_features.\n\nAturan untuk semua langkah:\n1. Jangan mengulang Data Preparation 0–9, jangan membagi ulang data, dan jangan mengubah selected_features, TARGET, X_train, X_test, y_train, maupun y_test. Variabel baru diberi nama yang jelas.\n2. Data uji (X_test/y_test atau padanan mentahnya) hanya dipakai di Langkah 15B. Jangan dipakai untuk CV, pemilihan model, tuning, threshold, atau interpretasi.\n3. Kelas positif CKD adalah label 1 (pastikan y berkode 0/1).\n4. Gunakan StratifiedKFold(n_splits=5, shuffle=True, random_state=42) yang sama di semua langkah, dan random_state=42 pada model yang mendukungnya.\n5. Gunakan Pipeline. Preprocessing yang parameternya dipelajari dari data harus berada di dalam Pipeline dan tidak boleh dilakukan ganda dengan Langkah 5–8.\n6. Sebelum tiap langkah, periksa kode dan hasil sebelumnya. Jangan mengasumsikan variabel yang belum diperiksa keberadaannya.\n7. Kode rapi, ringkas, dan berjalan di Google Colab. Penjelasan singkat dalam bahasa Indonesia yang mudah dipahami.\n8. Kerjakan hanya langkah yang saya berikan, lalu berhenti dan tunggu instruksi berikutnya.\n9. Semua file hasil (model, metadata, aplikasi) disimpan ke Google Drive di folder \"Colab Notebooks/Hasil\". Gunakan variabel OUTPUT_DIR = \"/content/drive/MyDrive/Colab Notebooks/Hasil\", mount Drive dan buat folder jika belum ada. Jangan menyimpan ke tempat lain.\n\nKonfirmasi pemahaman saja, jangan membuat kode sampai saya meminta Langkah 10."
   },
   {
     "badge": "",
@@ -1086,7 +1095,7 @@ Berikan: kode ekspor ONNX, kode verifikasi kesamaan prediksi, file index.html le
     "badge": "",
     "desc": "",
     "cardLabel": "Langkah 11",
-    "text": "LANGKAH 11 — CROSS VALIDATION\nEvaluasi semua pipeline dengan cross_validate pada data latih (X dan y sesuai pendekatan yang dipilih di Langkah 10), return_train_score=True.\nMetrik: accuracy, precision, recall, f1, roc_auc. ROC-AUC dihitung dari probabilitas atau decision score, bukan prediksi kelas. Konfigurasi sama untuk semua model.\nSimpan hasilnya (termasuk skor train dan validation) agar bisa dipakai di Langkah 12 tanpa CV ulang.\n\nTampilkan:\n- Tabel rata-rata dan standar deviasi tiap metrik.\n- Grafik perbandingan antar model.\n- Kelebihan dan kekurangan tiap model secara singkat.\n- Model paling menjanjikan. F1 adalah metrik utama sementara, tetapi perhatikan Recall karena konteksnya deteksi risiko CKD.\nBelum ada tuning."
+    "text": "LANGKAH 11 — CROSS VALIDATION\nEvaluasi semua pipeline dengan cross_validate pada data latih (X dan y sesuai pendekatan yang dipilih di Langkah 10), return_train_score=True.\nMetrik: accuracy, precision, recall, f1, roc_auc. ROC-AUC dihitung dari probabilitas atau decision score, bukan prediksi kelas. Konfigurasi sama untuk semua model.\nSimpan hasilnya (termasuk skor train dan validation) agar bisa dipakai di Langkah 12 tanpa CV ulang.\n\nTampilkan:\n- Tabel rata-rata dan standar deviasi tiap metrik.\n- Grafik perbandingan antar model.\n- Kelebihan dan kekurangan tiap model secara singkat.\n- Model paling menjanjikan. F1 adalah metrik utama sementara, tetapi perhatikan Recall karena konteksnya deteksi risiko CKD.\n\nJika ada model dengan skor validasi mendekati sempurna (misalnya F1 atau ROC-AUC ≥ 0,99), jangan langsung anggap itu keberhasilan. Periksa kemungkinan target leakage: fitur yang nilainya hampir menentukan CKD_Status secara langsung (misalnya parameter laboratorium yang menjadi dasar diagnosis). Tampilkan fitur yang paling dominan dan jelaskan apakah skor tersebut wajar. Jangan mengubah fitur atau data, cukup laporkan dan tunggu keputusan saya.\n\nBelum ada tuning."
   },
   {
     "badge": "",
@@ -1098,13 +1107,13 @@ Berikan: kode ekspor ONNX, kode verifikasi kesamaan prediksi, file index.html le
     "badge": "",
     "desc": "",
     "cardLabel": "Langkah 13",
-    "text": "LANGKAH 13 — GRIDSEARCHCV\nTuning model terpilih dari Langkah 12 pada seluruh pipeline (gunakan prefix nama step pada param_grid).\n- GridSearchCV pada data latih dengan CV yang sama.\n- Grid wajar untuk Colab. Sertakan parameter preprocessing hanya jika relevan.\n- scoring multi-metrik (accuracy, precision, recall, f1, roc_auc), refit='f1'.\n- Simpan best_model = pipeline terbaik hasil refit.\n\nTampilkan: algoritma terpilih, parameter yang diuji, parameter terbaik, best CV score, ringkasan cv_results_ (top kombinasi), dan perbandingan skor CV sebelum dan sesudah tuning."
+    "text": "LANGKAH 13 — GRIDSEARCHCV\nTuning 1–3 model kandidat teratas dari Langkah 12 (jika selisih skor antar model kecil, tuning lebih dari satu model; jika satu model jelas unggul, cukup satu). Setiap kandidat dituning sebagai pipeline lengkap (gunakan prefix nama step pada param_grid).\n- GridSearchCV pada data latih dengan CV yang sama.\n- Grid wajar untuk Colab. Sertakan parameter preprocessing hanya jika relevan.\n- scoring multi-metrik (accuracy, precision, recall, f1, roc_auc), refit='f1', return_train_score=True.\n- Simpan best_model = pipeline terbaik hasil refit.\n\nTampilkan: algoritma terpilih, parameter yang diuji, parameter terbaik, best CV score, ringkasan cv_results_ (top kombinasi), dan perbandingan skor CV sebelum dan sesudah tuning.\n\nJika ada lebih dari satu kandidat, tampilkan perbandingan best CV score antar kandidat. Simpan hasil tiap kandidat, tetapi penentuan model final dilakukan di Langkah 14."
   },
   {
     "badge": "",
     "desc": "",
     "cardLabel": "Langkah 14",
-    "text": "LANGKAH 14 — KEPUTUSAN MODEL FINAL\nBandingkan model sebelum dan sesudah tuning memakai hasil Langkah 11 dan cv_results_ Langkah 13 (fold dan metrik yang sama). Jangan menjalankan CV ulang.\nCatat bahwa skor setelah tuning cenderung optimistis karena dipilih dari fold yang sama. Jika ingin lebih adil, lakukan nested CV ringan.\n\nTampilkan: tabel dan grafik per metrik, perubahan nilainya, dan analisis apakah tuning membantu.\nTentukan model final (utamakan F1 dan Recall) dan simpan sebagai best_model."
+    "text": "LANGKAH 14 — KEPUTUSAN MODEL FINAL\nBandingkan model sebelum dan sesudah tuning memakai hasil Langkah 11 dan cv_results_ Langkah 13 (fold dan metrik yang sama). Jangan menjalankan CV ulang.\nCatat bahwa skor setelah tuning cenderung optimistis karena dipilih dari fold yang sama. Jika ingin lebih adil, lakukan nested CV ringan.\n\nTampilkan: tabel dan grafik per metrik, perubahan nilainya, dan analisis apakah tuning membantu.\nTentukan model final (utamakan F1 dan Recall) dan simpan sebagai best_model.\n\nPastikan best_model sudah di-fit pada seluruh data latih. Jika model final adalah versi sebelum tuning (belum di-fit), lakukan fit pada seluruh data latih terlebih dahulu. Jangan menggunakan data uji."
   },
   {
     "badge": "",
@@ -1122,13 +1131,13 @@ Berikan: kode ekspor ONNX, kode verifikasi kesamaan prediksi, file index.html le
     "badge": "",
     "desc": "",
     "cardLabel": "Langkah 17",
-    "text": "LANGKAH 17 — DEPLOYMENT STREAMLIT\nGunakan model final, threshold, dan jenis skor dari Langkah 15. Jangan melatih ulang model.\n\nPeriksa dulu: model final, threshold, jenis skor, selected_features, tipe dan urutan fitur, serta apakah ada transformasi dari Langkah 5–8 (imputasi, encoding, scaling, batas outlier, fitur turunan) yang berada di luar pipeline. Jika ada, sertakan transformasi itu pada artefak yang disimpan agar input mentah dari form bisa diproses sama seperti saat pelatihan.\n\nA. Simpan ke OUTPUT_DIR (Google Drive, mount dan buat folder jika belum ada):\n1. Pipeline lengkap dengan joblib sebagai model.joblib.\n2. metadata.json berisi threshold, jenis skor (probabilitas atau decision score), selected_features, kelas positif dan pemetaan label, serta tipe dan rentang input dari data mentah (bukan dari data yang sudah diskalakan).\n\nB. Buat dan simpan ke OUTPUT_DIR: app.py, model.joblib, metadata.json, requirements.txt (versi library sesuai lingkungan saat model disimpan).\napp.py harus membaca model.joblib dan metadata.json dari folder yang sama dengan app.py (gunakan pathlib dan Path(__file__).parent), bukan dari path Colab atau Drive, agar tetap berjalan setelah dipindahkan ke GitHub.\n\nC. Fitur aplikasi (bahasa Indonesia, modern, sederhana, profesional, responsif, mudah dipakai pengguna umum):\n1. Judul: \"Sistem Prediksi Risiko Penyakit Ginjal Kronis (CKD)\".\n2. Form input dengan nama, tipe, dan urutan sesuai selected_features dan model final.\n3. Tombol Prediksi.\n4. Hasil berupa kategori \"Terindikasi CKD\" atau \"Tidak terindikasi CKD\", ditampilkan jelas.\n5. Probabilitas hanya jika model memakai predict_proba. Decision score tidak boleh ditampilkan sebagai probabilitas.\n6. Threshold dan jenis skor harus sama seperti di Langkah 15.\n7. Penjelasan singkat mengenai hasil prediksi.\n8. Disclaimer: aplikasi hanya untuk edukasi dan penelitian, bukan alat diagnosis medis.\n\nD. Ketentuan teknis:\n1. Preprocessing berjalan lewat pipeline yang tersimpan.\n2. Tangani input kosong, tidak valid, atau di luar rentang dengan pesan yang jelas.\n3. Rentang input berdasarkan karakteristik dataset. Jangan mengarang rentang medis, dan jelaskan jika perlu.\n4. Semua file bisa dipakai bersama tanpa melatih model ulang.\n\nE. Setelah semua tersimpan, tampilkan daftar file di OUTPUT_DIR beserta ukurannya untuk konfirmasi.\n\nBerikan: kode app.py, kode penyimpanan model dan metadata, requirements.txt, petunjuk menjalankan lokal (streamlit run app.py), dan petunjuk deployment ke Streamlit Community Cloud lewat GitHub."
+    "text": "LANGKAH 17 — DEPLOYMENT STREAMLIT\nGunakan model final, threshold, dan jenis skor dari Langkah 15. Jangan melatih ulang model.\n\nPeriksa dulu: model final, threshold, jenis skor, selected_features, tipe dan urutan fitur, serta apakah ada transformasi dari Langkah 5–8 (imputasi, encoding, scaling, batas outlier, fitur turunan) yang berada di luar pipeline. Jika ada, sertakan transformasi itu pada artefak yang disimpan agar input mentah dari form bisa diproses sama seperti saat pelatihan.\n\nA. Simpan ke OUTPUT_DIR (Google Drive, mount dan buat folder jika belum ada):\n1. Pipeline lengkap dengan joblib sebagai model.joblib.\n2. metadata.json berisi threshold, jenis skor (probabilitas atau decision score), selected_features, kelas positif dan pemetaan label, serta tipe dan rentang input dari data latih mentah saja (bukan dari data uji, dan bukan dari data yang sudah diskalakan).\n\nB. Buat dan simpan ke OUTPUT_DIR: app.py, model.joblib, metadata.json, requirements.txt (versi library sesuai lingkungan saat model disimpan).\napp.py harus membaca model.joblib dan metadata.json dari folder yang sama dengan app.py (gunakan pathlib dan Path(__file__).parent), bukan dari path Colab atau Drive, agar tetap berjalan setelah dipindahkan ke GitHub.\n\nC. Fitur aplikasi (bahasa Indonesia, modern, sederhana, profesional, responsif, mudah dipakai pengguna umum):\n1. Judul: \"Sistem Prediksi Risiko Penyakit Ginjal Kronis (CKD)\".\n2. Form input dengan nama, tipe, dan urutan sesuai selected_features dan model final.\n3. Tombol Prediksi.\n4. Hasil berupa kategori \"Terindikasi CKD\" atau \"Tidak terindikasi CKD\", ditampilkan jelas.\n5. Probabilitas hanya jika model memakai predict_proba. Decision score tidak boleh ditampilkan sebagai probabilitas.\n6. Threshold dan jenis skor harus sama seperti di Langkah 15.\n7. Penjelasan singkat mengenai hasil prediksi.\n8. Disclaimer: aplikasi hanya untuk edukasi dan penelitian, bukan alat diagnosis medis.\n\nD. Ketentuan teknis:\n1. Preprocessing berjalan lewat pipeline yang tersimpan.\n2. Tangani input kosong, tidak valid, atau di luar rentang dengan pesan yang jelas.\n3. Rentang input dihitung dari data latih mentah saja (nilai minimum dan maksimum). Jangan mengarang rentang medis, dan jelaskan jika perlu.\n4. Semua file bisa dipakai bersama tanpa melatih model ulang.\n\nE. Setelah semua tersimpan, tampilkan daftar file di OUTPUT_DIR beserta ukurannya untuk konfirmasi.\n\nBerikan: kode app.py, kode penyimpanan model dan metadata, requirements.txt, petunjuk menjalankan lokal (streamlit run app.py), dan petunjuk deployment ke Streamlit Community Cloud lewat GitHub."
   },
   {
     "badge": "",
     "desc": "",
     "cardLabel": "Langkah 18",
-    "text": "LANGKAH 18 — VERSI HTML MANDIRI (OPSIONAL)\nBuat versi HTML statis dari model final tanpa server Python. Jangan melatih ulang model. Simpan model.onnx dan index.html ke OUTPUT_DIR.\n\nA. Periksa dulu apakah seluruh pipeline final bisa dikonversi ke ONNX (skl2onnx). Jika ada bagian yang tidak didukung (misalnya transformer kustom), jelaskan dan usulkan solusinya sebelum lanjut.\n\nB. Ekspor pipeline lengkap ke model.onnx. Verifikasi bahwa prediksi ONNX sama dengan pipeline asli pada beberapa sampel data latih (bukan data uji), termasuk skor yang dipakai untuk threshold.\n\nC. Buat satu file index.html berisi:\n1. Form input dengan nama, tipe, dan urutan sesuai selected_features.\n2. onnxruntime-web untuk menjalankan model di browser.\n3. Threshold dan jenis skor dari Langkah 15.\n4. Hasil \"Terindikasi CKD\" atau \"Tidak terindikasi CKD\". Probabilitas hanya jika model menghasilkan probabilitas, dan decision score tidak boleh ditampilkan sebagai probabilitas.\n5. Penjelasan singkat hasil dan disclaimer bahwa ini bukan diagnosis medis.\n6. Tampilan modern, sederhana, profesional, responsif, dan berbahasa Indonesia.\n\nD. Embed model.onnx sebagai base64 di dalam index.html agar bisa dibuka langsung dari komputer maupun di-host sebagai halaman statis (GitHub Pages), tanpa fetch ke file lain.\n\nE. Jika preprocessing (encoding, scaling, imputasi) tidak ikut masuk ONNX, tulis ulang di JavaScript dengan parameter yang persis sama dari pipeline, lalu verifikasi hasilnya sama.\n\nF. Validasi input: tangani nilai kosong atau tidak valid. Rentang input berdasarkan karakteristik dataset, jangan mengarang rentang medis.\n\nG. Tampilkan daftar file di OUTPUT_DIR beserta ukurannya setelah selesai.\n\nBerikan: kode ekspor ONNX, kode verifikasi kesamaan prediksi, file index.html lengkap, dan petunjuk membuka serta mengunggahnya ke GitHub Pages."
+    "text": "LANGKAH 18 — VERSI HTML MANDIRI (OPSIONAL)\nBuat versi HTML statis dari model final tanpa server Python. Jangan melatih ulang model. Simpan model.onnx dan index.html ke OUTPUT_DIR.\n\nA. Periksa dulu apakah seluruh pipeline final bisa dikonversi ke ONNX (skl2onnx). Jika ada bagian yang tidak didukung (misalnya transformer kustom), jelaskan dan usulkan solusinya sebelum lanjut.\n\nB. Ekspor pipeline lengkap ke model.onnx. Verifikasi bahwa prediksi ONNX sama dengan pipeline asli pada beberapa sampel data latih (bukan data uji), termasuk skor yang dipakai untuk threshold.\n\nC. Buat satu file index.html berisi:\n1. Form input dengan nama, tipe, dan urutan sesuai selected_features.\n2. onnxruntime-web untuk menjalankan model di browser.\n3. Threshold dan jenis skor dari Langkah 15.\n4. Hasil \"Terindikasi CKD\" atau \"Tidak terindikasi CKD\". Probabilitas hanya jika model menghasilkan probabilitas, dan decision score tidak boleh ditampilkan sebagai probabilitas.\n5. Penjelasan singkat hasil dan disclaimer bahwa ini bukan diagnosis medis.\n6. Tampilan modern, sederhana, profesional, responsif, dan berbahasa Indonesia.\n\nD. Embed model.onnx sebagai base64 di dalam index.html agar bisa dibuka langsung dari komputer maupun di-host sebagai halaman statis (GitHub Pages), tanpa fetch ke file lain.\n\nE. Jika preprocessing (encoding, scaling, imputasi) tidak ikut masuk ONNX, tulis ulang di JavaScript dengan parameter yang persis sama dari pipeline, lalu verifikasi hasilnya sama.\n\nF. Validasi input: tangani nilai kosong atau tidak valid. Rentang input dihitung dari data latih mentah saja, jangan mengarang rentang medis.\n\nG. Tampilkan daftar file di OUTPUT_DIR beserta ukurannya setelah selesai.\n\nBerikan: kode ekspor ONNX, kode verifikasi kesamaan prediksi, file index.html lengkap, dan petunjuk membuka serta mengunggahnya ke GitHub Pages."
   }
 ];
   </script>
