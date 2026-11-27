@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Copy - Sistem Prediksi Risiko Penyakit Ginjal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #090a0f;
+      --card-bg: #1e2025;
+      --card-header: #262930;
+      --border-color: #2e323b;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-sub: #cbd5e1;
+      --accent-blue: #0284c7;
+      --accent-blue-bg: rgba(2, 132, 199, 0.15);
+      --accent-green: #10b981;
+      --btn-hover: #333842;
+      --danger: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.6;
+      padding-bottom: 80px;
+      min-height: 100vh;
+    }
+
+    /* Top Navigation Bar */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(9, 10, 15, 0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 14px 20px;
+    }
+
+    .header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: -0.3px;
+    }
+
+    .brand-icon {
+      background: linear-gradient(135deg, #0ea5e9, #6366f1);
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background: #0284c7;
+      color: #ffffff;
+    }
+    .btn-primary:hover {
+      background: #0369a1;
+    }
+
+    .btn-secondary {
+      background: #1e222b;
+      color: var(--text-main);
+      border-color: var(--border-color);
+    }
+    .btn-secondary:hover {
+      background: var(--btn-hover);
+      border-color: #475569;
+    }
+
+    .btn-success {
+      background: #059669;
+      color: #ffffff;
+    }
+    .btn-success:hover {
+      background: #047857;
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.25);
+    }
+
+    /* Container */
+    .container {
+      max-width: 900px;
+      margin: 28px auto;
+      padding: 0 16px;
+    }
+
+    /* Search Bar */
+    .search-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      align-items: center;
+    }
+
+    .search-input-wrapper {
+      position: relative;
+      flex: 1;
+    }
+
+    .search-input-wrapper svg {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px 14px 10px 42px;
+      background: #14171f;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      color: var(--text-main);
+      font-size: 0.9rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-input:focus {
+      border-color: #38bdf8;
+    }
+
+    /* Section Item */
+    .item-section {
+      margin-bottom: 32px;
+      position: relative;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Pill Tag (Langkah 9 - Pelabelan) */
+    .tag-badge {
+      display: inline-block;
+      background: var(--accent-blue-bg);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      padding: 3px 12px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    /* Description (Tujuan: ...) */
+    .item-desc {
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .item-desc strong {
+      color: #ffffff;
+    }
+
+    /* Copy Card */
+    .copy-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      transition: border-color 0.2s;
+    }
+
+    .copy-card:hover {
+      border-color: #3f4553;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+      background: transparent;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .card-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .card-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .icon-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .icon-btn:hover {
+      background: var(--btn-hover);
+      color: var(--text-main);
+    }
+
+    .icon-btn.copied {
+      color: var(--accent-green) !important;
+    }
+
+    .card-body {
+      padding: 16px 20px;
+      color: #e2e8f0;
+      font-size: 0.95rem;
+      line-height: 1.65;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: inherit;
+    }
+
+    /* Edit controls toolbar per item */
+    .item-edit-toolbar {
+      display: none;
+      justify-content: flex-end;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    body.edit-mode .item-edit-toolbar {
+      display: flex;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0f172a;
+      border: 1px solid #38bdf8;
+      color: #ffffff;
+      padding: 12px 18px;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Modal Styling */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: #151821;
+      border: 1px solid var(--border-color);
+      width: 100%;
+      max-width: 600px;
+      border-radius: 14px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+      animation: modalIn 0.25s ease;
+    }
+
+    @keyframes modalIn {
+      from { transform: scale(0.96); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .modal-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-height: 75vh;
+      overflow-y: auto;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-input, .form-textarea {
+      background: #0e1017;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-main);
+      padding: 10px 14px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus, .form-textarea:focus {
+      border-color: #38bdf8;
+    }
+
+    .form-textarea {
+      min-height: 140px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .modal-footer {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      background: #11131a;
+    }
+
+    /* Expand Modal Text */
+    .expand-content {
+      background: #090a0f;
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    /* Bottom Info Banner */
+    .html-sync-banner {
+      background: rgba(30, 41, 59, 0.4);
+      border: 1px dashed var(--border-color);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-top: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .html-sync-banner p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .html-sync-banner p strong {
+      color: var(--text-sub);
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 50px 20px;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 600px) {
+      .header-inner {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .nav-actions {
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body class="edit-mode">
+
+  <!-- Header -->
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+          </svg>
+        </div>
+        <span>QuickCopy Hub</span>
+      </div>
+
+      <div class="nav-actions">
+        <button class="btn btn-primary" id="toggleEditBtn" onclick="toggleEditMode()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+          </svg>
+          <span id="editBtnText">Selesai Edit</span>
+        </button>
+
+        <button class="btn btn-primary" onclick="openAddModal()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Tambah Teks
+        </button>
+
+        <button class="btn btn-secondary" onclick="copyFullHTMLCode()" title="Salin seluruh kode HTML yang sudah diperbarui">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+          Salin Kode HTML
+        </button>
+
+        <button class="btn btn-success" onclick="downloadCurrentHTML()" title="Download file index.html dengan data terbaru">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Unduh HTML
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <div class="search-bar">
+      <div class="search-input-wrapper">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="searchInput" class="search-input" placeholder="Cari langkah, tujuan, atau teks..." oninput="handleSearch()">
+      </div>
+    </div>
+
+    <!-- Items Container -->
+    <div id="itemsContainer"><div class="item-section">
+          <div class="tag-badge">Minimal (4 unsur)</div>
+          
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Desain</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(0, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(0)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">Buatlah poster promosi Pelatihan Data Science dan Artificial Intelligence (AI) untuk masyarakat umum dan tenaga kerja dengan desain modern, menarik, profesional, serta informatif. Gunakan format vertikal A4, tampilkan judul kegiatan, informasi pendaftaran, jadwal, tempat, dan kontak penyelenggara dengan tata letak yang rapi dan mudah dibaca.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(0, -1)" disabled="">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(0, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(0)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(0)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Presentasi</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(1, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(1)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">Buatlah presentasi  tentang pengenalan Data Science dan Artificial Intelligence (AI) untuk peserta pelatihan pemula. Susun sebanyak 12 slide dengan materi yang sistematis, bahasa yang mudah dipahami, desain modern, profesional, dan dilengkapi visualisasi yang relevan.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(1, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(1, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(1)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(1)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Laporan</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(2, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(2)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">Susun laporan pelaksanaan kegiatan Pelatihan Data Science dan Artificial Intelligence (AI) berdasarkan dokumen dan data yang saya lampirkan. Buat laporan dengan struktur sistematis, bahasa Indonesia formal, ringkas, akurat, dan siap digunakan sebagai dokumen resmi lembaga.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(2, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(2, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(2)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(2)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Website</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(3, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(3)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">Buatlah website profil lembaga pelatihan komputer yang menampilkan informasi profil, program pelatihan, fasilitas, galeri kegiatan, dan kontak. Hasilnya berupa website menggunakan HTML, CSS, dan JavaScript dengan desain modern, profesional, responsif, serta mudah digunakan oleh pengunjung.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(3, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(3, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(3)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(3)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          <div class="tag-badge">Prompt menengah (6 unsur)</div>
+          
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Desain</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(4, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(4)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">Bertindaklah sebagai desainer grafis profesional yang berpengalaman membuat media promosi pendidikan dan pelatihan. Saya ingin membuat poster promosi Pelatihan Data Science dan Artificial Intelligence (AI) yang bertujuan menarik minat masyarakat dan tenaga kerja untuk mengikuti pelatihan. Buatlah desain poster dengan konsep modern, futuristik, dan profesional menggunakan elemen visual yang menggambarkan teknologi, data, dan kecerdasan buatan. Gunakan format vertikal A4 dengan kombinasi warna yang harmonis, tipografi tegas, serta hierarki informasi yang jelas. Hasil akhir harus terlihat menarik, informatif, dan layak dipublikasikan melalui media sosial maupun dicetak.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(4, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(4, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(4)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(4)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Presentasi</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(5, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(5)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">Bertindaklah sebagai instructional designer dan konsultan presentasi profesional. Saya ingin membuat materi presentasi Pelatihan Data Science dan Artificial Intelligence (AI) untuk peserta yang belum memiliki pengalaman di bidang tersebut. Tujuannya adalah memberikan pemahaman dasar mengenai konsep, manfaat, proses kerja, dan penerapan teknologi AI dalam kehidupan maupun pekerjaan. Susun presentasi sebanyak 12 slide yang dimulai dari pengenalan, konsep dasar, jenis teknologi, contoh penerapan, studi kasus, hingga kesimpulan. Gunakan desain PowerPoint modern, minimalis, profesional, dengan format 16:9, dilengkapi ilustrasi, diagram, dan visualisasi yang relevan. Gunakan bahasa sederhana tetapi tetap akurat dan edukatif.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(5, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(5, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(5)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(5)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Laporan</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(6, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(6)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">Bertindaklah sebagai tenaga ahli administrasi perkantoran dan penyusun laporan kegiatan profesional. Saya sedang menyusun laporan pelaksanaan Pelatihan Data Science dan Artificial Intelligence (AI) yang diselenggarakan oleh LPK Build Tech Borneo. Tujuannya adalah mendokumentasikan proses pelaksanaan, hasil kegiatan, dan pertanggungjawaban penyelenggaraan. Susun laporan yang mencakup pendahuluan, tujuan, waktu dan tempat, peserta, pelaksanaan, hasil kegiatan, evaluasi, dan penutup. Gunakan bahasa Indonesia baku dan formal dengan penyajian yang ringkas, sistematis, serta siap dipindahkan ke Microsoft Word.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(6, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(6, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(6)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(6)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Website</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(7, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(7)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">Bertindaklah sebagai web developer dan UI/UX designer profesional. Saya ingin membuat website profil LPK Build Tech Borneo yang bergerak di bidang pelatihan komputer dengan tujuan memperkenalkan lembaga, menampilkan program pelatihan, dan menarik calon peserta. Buatlah website yang memiliki halaman beranda, profil lembaga, program pelatihan, fasilitas, galeri kegiatan, dan kontak. Gunakan HTML, CSS, dan JavaScript dengan tampilan modern, profesional, responsif, navigasi yang mudah digunakan, serta kompatibel dengan komputer dan smartphone. Hasil akhir harus memiliki tampilan menarik dan mudah dikembangkan.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(7, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(7, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(7)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(7)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          <div class="tag-badge">Prompt lengkap (8 unsur)</div>
+          
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Desain</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(8, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(8)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">Bertindaklah sebagai art director dan desainer grafis profesional yang ahli dalam pembuatan media promosi pendidikan dan teknologi. Saya sedang menyiapkan poster promosi Pelatihan Data Science dan Artificial Intelligence (AI) yang diselenggarakan oleh LPK Build Tech Borneo. Tujuan desain ini adalah membangun citra lembaga yang profesional sekaligus menarik minat masyarakat untuk mengikuti pelatihan. Buatlah poster dengan konsep modern, futuristik, elegan, dan komunikatif. Tampilkan judul kegiatan sebagai elemen utama, kemudian susun informasi mengenai penyelenggara, materi pelatihan, jadwal, tempat, peserta sasaran, benefit, dan kontak pendaftaran secara terstruktur. Gunakan logo resmi dan seluruh informasi yang saya lampirkan sebagai bahan utama. Terapkan kombinasi warna biru tua, biru terang, dan putih dengan elemen visual teknologi, data, serta kecerdasan buatan. Jangan mengubah logo, nama kegiatan, tanggal, maupun informasi resmi lainnya. Hasil akhir berupa desain vertikal A4 dengan tipografi yang mudah dibaca, komposisi seimbang, resolusi tinggi, dan siap digunakan untuk publikasi digital maupun cetak.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(8, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(8, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(8)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(8)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Presentasi</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(9, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(9)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">Bertindaklah sebagai ahli Data Science, praktisi Artificial Intelligence, dan konsultan presentasi profesional. Saya sedang menyiapkan materi presentasi untuk kegiatan Pelatihan Data Science dan Artificial Intelligence (AI) yang ditujukan kepada peserta pemula dari berbagai latar belakang pendidikan dan pekerjaan. Tujuan presentasi adalah memberikan pemahaman konseptual dan praktis mengenai Data Science serta AI, sehingga peserta mampu mengenali manfaat dan peluang penerapannya. Susun 12 slide dengan alur yang mencakup pengantar Data Science, pengertian AI, hubungan Data Science dan AI, tahapan pengolahan data, machine learning, generative AI, contoh penerapan di dunia kerja, tantangan, etika, dan kesimpulan. Gunakan materi dari referensi akademik dan sumber tepercaya, serta hindari informasi yang tidak dapat diverifikasi. Terapkan desain modern, profesional, minimalis, format 16:9, dengan warna konsisten, diagram, ilustrasi, dan infografik. Jangan memenuhi slide dengan paragraf panjang. Setiap slide harus memiliki satu pesan utama dan dilengkapi catatan narasi presenter. Hasil akhir berupa file PowerPoint yang dapat diedit dan siap digunakan untuk kegiatan pelatihan.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(9, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(9, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(9)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(9)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Laporan</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(10, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(10)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">Bertindaklah sebagai ahli administrasi perkantoran dan penyusun laporan pertanggungjawaban kegiatan yang berpengalaman. Saya sedang menyusun laporan resmi pelaksanaan Pelatihan Data Science dan Artificial Intelligence (AI) yang diselenggarakan oleh LPK Build Tech Borneo. Laporan ini bertujuan mendokumentasikan seluruh tahapan kegiatan, menjelaskan hasil yang dicapai, serta menjadi bentuk pertanggungjawaban kepada pihak terkait. Susun laporan dengan sistematika yang mencakup pendahuluan, dasar pelaksanaan, maksud dan tujuan, waktu dan tempat, penyelenggara dan peserta, materi dan narasumber, proses pelaksanaan, hasil dan capaian, evaluasi, kendala dan solusi, serta penutup. Gunakan data dari dokumen, daftar peserta, jadwal, dokumentasi, dan catatan kegiatan yang saya lampirkan. Jangan mengarang informasi, mengubah angka, atau membuat klaim capaian yang tidak didukung bukti. Jika ada data yang belum tersedia, tandai agar dapat saya lengkapi. Gunakan bahasa Indonesia baku, formal, objektif, dan tidak bertele-tele. Hasil akhir berupa dokumen laporan yang rapi, dilengkapi tabel jika diperlukan, dan siap digunakan dalam Microsoft Word.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(10, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(10, 1)">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(10)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(10)">Hapus</button>
+          </div>
+        </div><div class="item-section">
+          
+          
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">Website</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(11, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(11)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">Bertindaklah sebagai senior web developer dan UI/UX designer yang berpengalaman membangun website lembaga pendidikan dan pelatihan. Saya sedang mengembangkan website profil LPK Build Tech Borneo, sebuah lembaga pelatihan komputer yang ingin memperkuat citra sebagai lembaga pelatihan yang unggul dan terpercaya di Kalimantan Selatan. Tujuan website ini adalah memperkenalkan identitas lembaga, memberikan informasi program pelatihan, menampilkan fasilitas, serta memudahkan masyarakat melakukan pendaftaran dan menghubungi admin. Buatlah website dengan halaman beranda, profil lembaga, program pelatihan, fasilitas, galeri kegiatan, informasi pendaftaran, dan kontak. Gunakan HTML5, CSS3, JavaScript, serta Bootstrap 5 jika diperlukan. Gunakan logo resmi dan informasi yang saya lampirkan sebagai bahan utama. Terapkan desain modern dengan kombinasi warna yang konsisten, tipografi profesional, navigasi sederhana, dan tampilan responsif. Jangan mengarang informasi lembaga, jangan mengubah logo, dan jangan membuat tombol yang tidak berfungsi. Hasil akhir berupa proyek website dengan struktur folder yang rapi, kode lengkap setiap file, serta panduan menjalankan website menggunakan XAMPP. Pastikan kode mudah dipahami, dapat dikembangkan, dan tidak mengandung kesalahan teknis.</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(11, -1)">↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(11, 1)" disabled="">↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(11)">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(11)">Hapus</button>
+          </div>
+        </div></div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="empty-state" style="display: none;">
+      <p>Tidak ada teks atau prompt yang cocok.</p>
+    </div>
+
+    <!-- HTML Export/Deploy Hint Banner -->
+    <div class="html-sync-banner">
+      <div>
+        <p><strong>💡 Panduan Deploy ke GitHub:</strong></p>
+        <p>• Data di bawah sudah tertanam murni di file HTML ini (tanpa database dan tanpa masalah cache).</p>
+        <p>• Anda bisa klik <strong>"Salin Kode HTML"</strong>, lalu di web GitHub klik <em>Edit this file</em> (ikon pensil) &gt; Paste &gt; Commit.</p>
+      </div>
+      <div>
+        <button class="btn btn-secondary" onclick="copyFullHTMLCode()">
+          Salin Kode HTML
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+    <span id="toastMsg">Seluruh kode HTML terbaru berhasil disalin ke clipboard!</span>
+  </div>
+
+  <!-- Add / Edit Modal -->
+  <div id="itemModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTitle">Tambah Bagian Teks</h3>
+        <button class="icon-btn" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="editIndex" value="">
+
+        <div class="form-group">
+          <label class="form-label">Label / Tag Badge (Opsional)</label>
+          <input type="text" id="inputBadge" class="form-input" placeholder="Contoh: Langkah 9 – Pelabelan">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Keterangan / Tujuan (Opsional)</label>
+          <input type="text" id="inputDesc" class="form-input" placeholder="Contoh: Tujuan: Memberikan label atau kategori pada data...">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Header Kotak Teks (Opsional)</label>
+          <input type="text" id="inputCardLabel" class="form-input" placeholder="Contoh: Menulis, Prompt AI, Kode, dsb.">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Isi Teks (Yang Akan Di-Copy) *</label>
+          <textarea id="inputText" class="form-textarea" placeholder="Tuliskan teks atau prompt yang ingin disalin di sini..." required=""></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal()">Batal</button>
+        <button class="btn btn-primary" onclick="saveItem()">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fullscreen / Expand Modal -->
+  <div id="expandModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title" id="expandTitle">Detail Teks</h3>
+        <div style="display:flex; gap: 8px;">
+          <button class="btn btn-primary" id="expandCopyBtn" onclick="copyExpandedText()">Salin</button>
+          <button class="icon-btn" onclick="closeExpandModal()">✕</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div id="expandContent" class="expand-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMBEDDED DATA SCRIPT: SEMUA DATA ANDA TERSIMPAN PERMANEN DI SINI -->
+  <script id="initialDataScript">
+    const DEFAULT_ITEMS = [
+  {
+    "badge": "Minimal (4 unsur)",
+    "desc": "",
+    "cardLabel": "Desain",
+    "text": "Buatlah poster promosi Pelatihan Data Science dan Artificial Intelligence (AI) untuk masyarakat umum dan tenaga kerja dengan desain modern, menarik, profesional, serta informatif. Gunakan format vertikal A4, tampilkan judul kegiatan, informasi pendaftaran, jadwal, tempat, dan kontak penyelenggara dengan tata letak yang rapi dan mudah dibaca."
+  },
+  {
+    "badge": "",
+    "desc": "",
+    "cardLabel": "Presentasi",
+    "text": "Buatlah presentasi  tentang pengenalan Data Science dan Artificial Intelligence (AI) untuk peserta pelatihan pemula. Susun sebanyak 12 slide dengan materi yang sistematis, bahasa yang mudah dipahami, desain modern, profesional, dan dilengkapi visualisasi yang relevan."
+  },
+  {
+    "badge": "",
+    "desc": "",
+    "cardLabel": "Laporan",
+    "text": "Susun laporan pelaksanaan kegiatan Pelatihan Data Science dan Artificial Intelligence (AI) berdasarkan dokumen dan data yang saya lampirkan. Buat laporan dengan struktur sistematis, bahasa Indonesia formal, ringkas, akurat, dan siap digunakan sebagai dokumen resmi lembaga."
+  },
+  {
+    "badge": "",
+    "desc": "",
+    "cardLabel": "Website",
+    "text": "Buatlah website profil lembaga pelatihan komputer yang menampilkan informasi profil, program pelatihan, fasilitas, galeri kegiatan, dan kontak. Hasilnya berupa website menggunakan HTML, CSS, dan JavaScript dengan desain modern, profesional, responsif, serta mudah digunakan oleh pengunjung."
+  },
+  {
+    "badge": "Prompt menengah (6 unsur)",
+    "desc": "",
+    "cardLabel": "Desain",
+    "text": "Bertindaklah sebagai desainer grafis profesional yang berpengalaman membuat media promosi pendidikan dan pelatihan. Saya ingin membuat poster promosi Pelatihan Data Science dan Artificial Intelligence (AI) yang bertujuan menarik minat masyarakat dan tenaga kerja untuk mengikuti pelatihan. Buatlah desain poster dengan konsep modern, futuristik, dan profesional menggunakan elemen visual yang menggambarkan teknologi, data, dan kecerdasan buatan. Gunakan format vertikal A4 dengan kombinasi warna yang harmonis, tipografi tegas, serta hierarki informasi yang jelas. Hasil akhir harus terlihat menarik, informatif, dan layak dipublikasikan melalui media sosial maupun dicetak."
+  },
+  {
+    "badge": "",
+    "desc": "",
+    "cardLabel": "Presentasi",
+    "text": "Bertindaklah sebagai instructional designer dan konsultan presentasi profesional. Saya ingin membuat materi presentasi Pelatihan Data Science dan Artificial Intelligence (AI) untuk peserta yang belum memiliki pengalaman di bidang tersebut. Tujuannya adalah memberikan pemahaman dasar mengenai konsep, manfaat, proses kerja, dan penerapan teknologi AI dalam kehidupan maupun pekerjaan. Susun presentasi sebanyak 12 slide yang dimulai dari pengenalan, konsep dasar, jenis teknologi, contoh penerapan, studi kasus, hingga kesimpulan. Gunakan desain PowerPoint modern, minimalis, profesional, dengan format 16:9, dilengkapi ilustrasi, diagram, dan visualisasi yang relevan. Gunakan bahasa sederhana tetapi tetap akurat dan edukatif."
+  },
+  {
+    "badge": "",
+    "desc": "",
+    "cardLabel": "Laporan",
+    "text": "Bertindaklah sebagai tenaga ahli administrasi perkantoran dan penyusun laporan kegiatan profesional. Saya sedang menyusun laporan pelaksanaan Pelatihan Data Science dan Artificial Intelligence (AI) yang diselenggarakan oleh LPK Build Tech Borneo. Tujuannya adalah mendokumentasikan proses pelaksanaan, hasil kegiatan, dan pertanggungjawaban penyelenggaraan. Susun laporan yang mencakup pendahuluan, tujuan, waktu dan tempat, peserta, pelaksanaan, hasil kegiatan, evaluasi, dan penutup. Gunakan bahasa Indonesia baku dan formal dengan penyajian yang ringkas, sistematis, serta siap dipindahkan ke Microsoft Word."
+  },
+  {
+    "badge": "",
+    "desc": "",
+    "cardLabel": "Website",
+    "text": "Bertindaklah sebagai web developer dan UI/UX designer profesional. Saya ingin membuat website profil LPK Build Tech Borneo yang bergerak di bidang pelatihan komputer dengan tujuan memperkenalkan lembaga, menampilkan program pelatihan, dan menarik calon peserta. Buatlah website yang memiliki halaman beranda, profil lembaga, program pelatihan, fasilitas, galeri kegiatan, dan kontak. Gunakan HTML, CSS, dan JavaScript dengan tampilan modern, profesional, responsif, navigasi yang mudah digunakan, serta kompatibel dengan komputer dan smartphone. Hasil akhir harus memiliki tampilan menarik dan mudah dikembangkan."
+  },
+  {
+    "badge": "Prompt lengkap (8 unsur)",
+    "desc": "",
+    "cardLabel": "Desain",
+    "text": "Bertindaklah sebagai art director dan desainer grafis profesional yang ahli dalam pembuatan media promosi pendidikan dan teknologi. Saya sedang menyiapkan poster promosi Pelatihan Data Science dan Artificial Intelligence (AI) yang diselenggarakan oleh LPK Build Tech Borneo. Tujuan desain ini adalah membangun citra lembaga yang profesional sekaligus menarik minat masyarakat untuk mengikuti pelatihan. Buatlah poster dengan konsep modern, futuristik, elegan, dan komunikatif. Tampilkan judul kegiatan sebagai elemen utama, kemudian susun informasi mengenai penyelenggara, materi pelatihan, jadwal, tempat, peserta sasaran, benefit, dan kontak pendaftaran secara terstruktur. Gunakan logo resmi dan seluruh informasi yang saya lampirkan sebagai bahan utama. Terapkan kombinasi warna biru tua, biru terang, dan putih dengan elemen visual teknologi, data, serta kecerdasan buatan. Jangan mengubah logo, nama kegiatan, tanggal, maupun informasi resmi lainnya. Hasil akhir berupa desain vertikal A4 dengan tipografi yang mudah dibaca, komposisi seimbang, resolusi tinggi, dan siap digunakan untuk publikasi digital maupun cetak."
+  },
+  {
+    "badge": "",
+    "desc": "",
+    "cardLabel": "Presentasi",
+    "text": "Bertindaklah sebagai ahli Data Science, praktisi Artificial Intelligence, dan konsultan presentasi profesional. Saya sedang menyiapkan materi presentasi untuk kegiatan Pelatihan Data Science dan Artificial Intelligence (AI) yang ditujukan kepada peserta pemula dari berbagai latar belakang pendidikan dan pekerjaan. Tujuan presentasi adalah memberikan pemahaman konseptual dan praktis mengenai Data Science serta AI, sehingga peserta mampu mengenali manfaat dan peluang penerapannya. Susun 12 slide dengan alur yang mencakup pengantar Data Science, pengertian AI, hubungan Data Science dan AI, tahapan pengolahan data, machine learning, generative AI, contoh penerapan di dunia kerja, tantangan, etika, dan kesimpulan. Gunakan materi dari referensi akademik dan sumber tepercaya, serta hindari informasi yang tidak dapat diverifikasi. Terapkan desain modern, profesional, minimalis, format 16:9, dengan warna konsisten, diagram, ilustrasi, dan infografik. Jangan memenuhi slide dengan paragraf panjang. Setiap slide harus memiliki satu pesan utama dan dilengkapi catatan narasi presenter. Hasil akhir berupa file PowerPoint yang dapat diedit dan siap digunakan untuk kegiatan pelatihan."
+  },
+  {
+    "badge": "",
+    "desc": "",
+    "cardLabel": "Laporan",
+    "text": "Bertindaklah sebagai ahli administrasi perkantoran dan penyusun laporan pertanggungjawaban kegiatan yang berpengalaman. Saya sedang menyusun laporan resmi pelaksanaan Pelatihan Data Science dan Artificial Intelligence (AI) yang diselenggarakan oleh LPK Build Tech Borneo. Laporan ini bertujuan mendokumentasikan seluruh tahapan kegiatan, menjelaskan hasil yang dicapai, serta menjadi bentuk pertanggungjawaban kepada pihak terkait. Susun laporan dengan sistematika yang mencakup pendahuluan, dasar pelaksanaan, maksud dan tujuan, waktu dan tempat, penyelenggara dan peserta, materi dan narasumber, proses pelaksanaan, hasil dan capaian, evaluasi, kendala dan solusi, serta penutup. Gunakan data dari dokumen, daftar peserta, jadwal, dokumentasi, dan catatan kegiatan yang saya lampirkan. Jangan mengarang informasi, mengubah angka, atau membuat klaim capaian yang tidak didukung bukti. Jika ada data yang belum tersedia, tandai agar dapat saya lengkapi. Gunakan bahasa Indonesia baku, formal, objektif, dan tidak bertele-tele. Hasil akhir berupa dokumen laporan yang rapi, dilengkapi tabel jika diperlukan, dan siap digunakan dalam Microsoft Word."
+  },
+  {
+    "badge": "",
+    "desc": "",
+    "cardLabel": "Website",
+    "text": "Bertindaklah sebagai senior web developer dan UI/UX designer yang berpengalaman membangun website lembaga pendidikan dan pelatihan. Saya sedang mengembangkan website profil LPK Build Tech Borneo, sebuah lembaga pelatihan komputer yang ingin memperkuat citra sebagai lembaga pelatihan yang unggul dan terpercaya di Kalimantan Selatan. Tujuan website ini adalah memperkenalkan identitas lembaga, memberikan informasi program pelatihan, menampilkan fasilitas, serta memudahkan masyarakat melakukan pendaftaran dan menghubungi admin. Buatlah website dengan halaman beranda, profil lembaga, program pelatihan, fasilitas, galeri kegiatan, informasi pendaftaran, dan kontak. Gunakan HTML5, CSS3, JavaScript, serta Bootstrap 5 jika diperlukan. Gunakan logo resmi dan informasi yang saya lampirkan sebagai bahan utama. Terapkan desain modern dengan kombinasi warna yang konsisten, tipografi profesional, navigasi sederhana, dan tampilan responsif. Jangan mengarang informasi lembaga, jangan mengubah logo, dan jangan membuat tombol yang tidak berfungsi. Hasil akhir berupa proyek website dengan struktur folder yang rapi, kode lengkap setiap file, serta panduan menjalankan website menggunakan XAMPP. Pastikan kode mudah dipahami, dapat dikembangkan, dan tidak mengandung kesalahan teknis."
+  }
+];
+  </script>
+
+  <script>
+    // Master data in memory directly from DEFAULT_ITEMS
+    let items = [];
+    let isEditMode = false;
+    let currentExpandedText = "";
+
+    function loadData() {
+      // Selalu gunakan data master DEFAULT_ITEMS dari file HTML ini agar bebas dari konflik cache browser!
+      items = JSON.parse(JSON.stringify(DEFAULT_ITEMS));
+    }
+
+    // Render items to DOM
+    function renderItems(filterQuery = "") {
+      const container = document.getElementById("itemsContainer");
+      const emptyState = document.getElementById("emptyState");
+      container.innerHTML = "";
+
+      const query = filterQuery.toLowerCase().trim();
+      const filtered = items.filter(item => {
+        if (!query) return true;
+        return (
+          (item.badge && item.badge.toLowerCase().includes(query)) ||
+          (item.desc && item.desc.toLowerCase().includes(query)) ||
+          (item.cardLabel && item.cardLabel.toLowerCase().includes(query)) ||
+          (item.text && item.text.toLowerCase().includes(query))
+        );
+      });
+
+      if (filtered.length === 0) {
+        emptyState.style.display = "block";
+        return;
+      } else {
+        emptyState.style.display = "none";
+      }
+
+      filtered.forEach((item) => {
+        const realIndex = items.indexOf(item);
+        const section = document.createElement("div");
+        section.className = "item-section";
+
+        let badgeHtml = item.badge ? `<div class="tag-badge">${escapeHtml(item.badge)}</div>` : "";
+        let descHtml = item.desc ? `<div class="item-desc">${formatDesc(item.desc)}</div>` : "";
+        let labelText = item.cardLabel ? escapeHtml(item.cardLabel) : "Teks";
+
+        section.innerHTML = `
+          ${badgeHtml}
+          ${descHtml}
+          <div class="copy-card">
+            <div class="card-top">
+              <span class="card-label">${labelText}</span>
+              <div class="card-actions">
+                <button class="icon-btn" title="Salin Teks" onclick="copyText(${realIndex}, this)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+                  </svg>
+                </button>
+                <button class="icon-btn" title="Perbesar Teks" onclick="expandText(${realIndex})">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"/>
+                    <polyline points="9 21 3 21 3 15"/>
+                    <line x1="21" y1="3" x2="14" y2="10"/>
+                    <line x1="3" y1="21" x2="10" y2="14"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">${escapeHtml(item.text)}</div>
+          </div>
+          <div class="item-edit-toolbar">
+            <button class="btn btn-secondary" onclick="moveItem(${realIndex}, -1)" ${realIndex === 0 ? "disabled" : ""}>↑ Naik</button>
+            <button class="btn btn-secondary" onclick="moveItem(${realIndex}, 1)" ${realIndex === items.length - 1 ? "disabled" : ""}>↓ Turun</button>
+            <button class="btn btn-secondary" onclick="openEditModal(${realIndex})">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(${realIndex})">Hapus</button>
+          </div>
+        `;
+
+        container.appendChild(section);
+      });
+    }
+
+    function formatDesc(raw) {
+      if (!raw) return "";
+      if (raw.startsWith("<strong>") || raw.includes("<strong>")) {
+        return raw;
+      }
+      if (raw.toLowerCase().startsWith("tujuan:")) {
+        return `<strong>Tujuan:</strong>` + escapeHtml(raw.slice(7));
+      }
+      return escapeHtml(raw);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return "";
+      const div = document.createElement("div");
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    // Copying functionality
+    function copyText(index, btnElement) {
+      const text = items[index].text;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast("Teks berhasil disalin!");
+        if (btnElement) {
+          btnElement.classList.add("copied");
+          btnElement.innerHTML = `
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          `;
+          setTimeout(() => {
+            btnElement.classList.remove("copied");
+            btnElement.innerHTML = `
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+              </svg>
+            `;
+          }, 1500);
+        }
+      }).catch(err => {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+        showToast("Teks berhasil disalin!");
+      });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      const toastMsg = document.getElementById("toastMsg");
+      toastMsg.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2200);
+    }
+
+    // Modal controls
+    function openAddModal() {
+      document.getElementById("modalTitle").textContent = "Tambah Bagian Teks";
+      document.getElementById("editIndex").value = "";
+      document.getElementById("inputBadge").value = "";
+      document.getElementById("inputDesc").value = "";
+      document.getElementById("inputCardLabel").value = "Copy";
+      document.getElementById("inputText").value = "";
+      document.getElementById("itemModal").classList.add("active");
+    }
+
+    function openEditModal(index) {
+      const item = items[index];
+      document.getElementById("modalTitle").textContent = "Edit Bagian Teks";
+      document.getElementById("editIndex").value = index;
+      document.getElementById("inputBadge").value = item.badge || "";
+      document.getElementById("inputDesc").value = item.desc ? item.desc.replace(/<\/?[^>]+(>|$)/g, "") : "";
+      document.getElementById("inputCardLabel").value = item.cardLabel || "";
+      document.getElementById("inputText").value = item.text || "";
+      document.getElementById("itemModal").classList.add("active");
+    }
+
+    function closeModal() {
+      document.getElementById("itemModal").classList.remove("active");
+    }
+
+    function saveItem() {
+      const text = document.getElementById("inputText").value.trim();
+      if (!text) {
+        alert("Isi teks tidak boleh kosong!");
+        return;
+      }
+
+      const badge = document.getElementById("inputBadge").value.trim();
+      let desc = document.getElementById("inputDesc").value.trim();
+      const cardLabel = document.getElementById("inputCardLabel").value.trim() || "Copy";
+      const editIndex = document.getElementById("editIndex").value;
+
+      if (desc && desc.toLowerCase().startsWith("tujuan:")) {
+        desc = "<strong>Tujuan:</strong> " + desc.slice(7).trim();
+      }
+
+      const itemData = { badge, desc, cardLabel, text };
+
+      if (editIndex !== "") {
+        items[parseInt(editIndex, 10)] = itemData;
+        showToast("Perubahan berhasil disimpan di layar!");
+      } else {
+        items.push(itemData);
+        showToast("Bagian teks baru berhasil ditambahkan!");
+      }
+
+      renderItems(document.getElementById("searchInput").value);
+      closeModal();
+    }
+
+    function deleteItem(index) {
+      if (confirm("Apakah Anda yakin ingin menghapus bagian ini?")) {
+        items.splice(index, 1);
+        renderItems(document.getElementById("searchInput").value);
+        showToast("Item berhasil dihapus.");
+      }
+    }
+
+    function moveItem(index, direction) {
+      const newIndex = index + direction;
+      if (newIndex < 0 || newIndex >= items.length) return;
+      const temp = items[index];
+      items[index] = items[newIndex];
+      items[newIndex] = temp;
+      renderItems(document.getElementById("searchInput").value);
+    }
+
+    // Expand view modal
+    function expandText(index) {
+      const item = items[index];
+      currentExpandedText = item.text;
+      document.getElementById("expandTitle").textContent = item.badge || item.cardLabel || "Detail Teks";
+      document.getElementById("expandContent").textContent = item.text;
+      document.getElementById("expandModal").classList.add("active");
+    }
+
+    function closeExpandModal() {
+      document.getElementById("expandModal").classList.remove("active");
+    }
+
+    function copyExpandedText() {
+      navigator.clipboard.writeText(currentExpandedText).then(() => {
+        showToast("Teks berhasil disalin!");
+      });
+    }
+
+    // Toggle Edit Mode UI
+    function toggleEditMode() {
+      isEditMode = !isEditMode;
+      document.body.classList.toggle("edit-mode", isEditMode);
+      const btn = document.getElementById("toggleEditBtn");
+      const btnText = document.getElementById("editBtnText");
+
+      if (isEditMode) {
+        btnText.textContent = "Selesai Edit";
+        btn.classList.remove("btn-secondary");
+        btn.classList.add("btn-primary");
+      } else {
+        btnText.textContent = "Mode Edit";
+        btn.classList.remove("btn-primary");
+        btn.classList.add("btn-secondary");
+      }
+    }
+
+    // Search filter
+    function handleSearch() {
+      const val = document.getElementById("searchInput").value;
+      renderItems(val);
+    }
+
+    // Generate updated HTML string
+    function generateUpdatedHTML() {
+      let htmlContent = document.documentElement.outerHTML;
+
+      // Replace DEFAULT_ITEMS block with current items
+      const newItemsJSON = JSON.stringify(items, null, 2);
+      const replacementScript = `const DEFAULT_ITEMS = ${newItemsJSON};`;
+      htmlContent = htmlContent.replace(/const DEFAULT_ITEMS = \[[\s\S]*?\];/m, replacementScript);
+
+      // Clean up dynamic edit class
+      htmlContent = htmlContent.replace('', '');
+
+      return "<!DOCTYPE html>\n<html lang=\"id\">\n" + htmlContent.substring(htmlContent.indexOf("<head>"));
+    }
+
+    // Download HTML
+    function downloadCurrentHTML() {
+      const fullHtml = generateUpdatedHTML();
+      const blob = new Blob([fullHtml], { type: "text/html;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "index.html";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      showToast("File index.html baru berhasil diunduh!");
+    }
+
+    // Copy entire HTML code to clipboard
+    function copyFullHTMLCode() {
+      const fullHtml = generateUpdatedHTML();
+      navigator.clipboard.writeText(fullHtml).then(() => {
+        showToast("Seluruh kode HTML terbaru berhasil disalin ke clipboard!");
+      }).catch(err => {
+        alert("Gagal menyalin otomatis. Silakan gunakan tombol Unduh HTML.");
+      });
+    }
+
+    // Initialize: langsung render dari data master DEFAULT_ITEMS
+    loadData();
+    renderItems();
+  </script>
+
+
+</body></html>
